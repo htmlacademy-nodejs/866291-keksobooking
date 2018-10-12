@@ -1,0 +1,25 @@
+{
+  "name": "866291-keksobooking",
+  "version": "0.0.1",
+  "description": "* Студент: [Andrey Pahomov](https://up.htmlacademy.ru/nodejs/2/user/866291). * Наставник: [Сергей Вохмянин](https://up.htmlacademy.ru/nodejs/2/user/530823).",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^5.6.1",
+    "eslint-config-htmlacademy": "^0.5.2"
+  },
+  "scripts": {
+    "test:lint": "eslint .",
+    "test": "npm run test:lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CyberWalrus/866291-keksobooking.git"
+  },
+  "author": "Andrey Pakhomov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CyberWalrus/866291-keksobooking/issues"
+  },
+  "homepage": "https://github.com/CyberWalrus/866291-keksobooking#readme"
+}

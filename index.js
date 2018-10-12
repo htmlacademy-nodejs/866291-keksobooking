@@ -2,7 +2,7 @@
 const PROGRAMM_NAME = `KeksoBooking`;
 const args = process.argv.slice(2);
 
-let code = 0;
+let code = 1;
 
 switch (args[0]) {
   case `--help`:
@@ -19,10 +19,8 @@ switch (args[0]) {
     Эта программа будет запускать сервер «${PROGRAMM_NAME}».
     Автор: Кекс.`);
     } else {
-      code = 1;
       console.error(`Неизвестная команда ${args[0]}.
     Чтобы прочитать правила использования приложения, наберите "--help"`);
-    };
-};
-
-process.exit(code);
+      process.exit(code);
+    }
+}

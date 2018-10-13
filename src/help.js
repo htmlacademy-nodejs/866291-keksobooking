@@ -12,9 +12,6 @@ const HELP_COMMAND = `--help`;
 module.exports = {
   name: HELP_COMMAND,
   description: `печатает этот текст`,
-  isApplicable(command) {
-    return command === HELP_COMMAND;
-  },
   execute() {
     let message = `Доступные команды:\n${HELP_COMMAND.italic.gray} — ${`печатает этот текст`.green}`;
     commands.forEach(function (item) {

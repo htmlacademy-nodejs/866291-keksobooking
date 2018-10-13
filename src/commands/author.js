@@ -2,7 +2,7 @@
 
 require(`colors`);
 
-const packageInfo = require(`../package`);
+const packageInfo = require(`../../package`);
 
 const AUTHOR_COMMAND = `--author`;
 

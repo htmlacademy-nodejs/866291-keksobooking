@@ -3,25 +3,25 @@
 require(`colors`);
 const packageInfo = require(`../package`);
 const commands = [
-  require(`./help`),
-  require(`./version`),
-  require(`./author`),
-  require(`./license`),
-  require(`./description`),
-  require(`./default`),
+  require(`./commands/help`),
+  require(`./commands/version`),
+  require(`./commands/author`),
+  require(`./commands/license`),
+  require(`./commands/description`),
+  require(`./commands/default`),
 ];
 const DEFAULT_COMMAND = `default`;
 
+let isApplicable = function (item, command) {
+  return item.name === command || item.name === DEFAULT_COMMAND;
+};
+
 module.exports = {
-  commands: commands,
   check(command) {
     if (!command) {
       console.log(`Привет пользователь!\nЭта программа будет запускать сервер «${packageInfo.name.green}».\nАвтор: ${packageInfo.author.blue}.`);
       process.exit(1);
     }
-    this.commands.find((item) => this.isApplicable(item, command)).execute(command);
-  },
-  isApplicable(item, command) {
-    return item.name === command || item.name === DEFAULT_COMMAND;
+    commands.find((item) => isApplicable(item, command)).execute(command);
   }
 };

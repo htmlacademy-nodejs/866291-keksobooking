@@ -8,6 +8,7 @@ const commands = [
   require(`./commands/author`),
   require(`./commands/license`),
   require(`./commands/description`),
+  require(`./commands/generate`),
   require(`./commands/default`),
 ];
 const DEFAULT_COMMAND = `default`;

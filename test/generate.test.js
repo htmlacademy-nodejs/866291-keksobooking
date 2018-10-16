@@ -3,7 +3,7 @@
 const assert = require(`assert`);
 const fs = require(`fs`);
 const {promisify} = require(`util`);
-const generateCommand = require(`../src/generate`);
+const generateCommand = require(`../src/commands/generate`);
 
 const access = promisify(fs.access);
 const unlink = promisify(fs.unlink);

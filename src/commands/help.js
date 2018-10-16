@@ -5,7 +5,8 @@ const commands = [
   require(`./version`),
   require(`./author`),
   require(`./license`),
-  require(`./description`)
+  require(`./description`),
+  require(`./generate`)
 ];
 const HELP_COMMAND = `--help`;
 

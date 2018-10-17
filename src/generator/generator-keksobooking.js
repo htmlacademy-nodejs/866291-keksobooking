@@ -1,60 +1,6 @@
 'use strict';
 
-const AVATAR_URL = `https://robohash.org/`;
-
-const OFFER = {
-  TITLE: [
-    `Большая уютная квартира`,
-    `Маленькая неуютная квартира`,
-    `Огромный прекрасный дворец`,
-    `Маленький ужасный дворец`,
-    `Красивый гостевой домик`,
-    `Некрасивый негостеприимный домик`,
-    `Уютное бунгало далеко от моря`,
-    `Неуютное бунгало по колено в воде`],
-  MAX_PRICE: 1000000,
-  MIN_PRICE: 1000,
-  TYPE: [
-    `flat`,
-    `palace`,
-    `house `,
-    `bungalo`,
-  ],
-  MAX_ROOMS: 5,
-  MIN_ROOMS: 1,
-  MAX_GUESTS: 1000,
-  MIN_GUESTS: 0,
-  CHECKIN: [
-    `12:00`,
-    `13:00`,
-    `14:00`
-  ],
-  CHECKOUT: [
-    `12:00`,
-    `13:00`,
-    `14:00`
-  ],
-  FEATURES: [
-    `wifi`,
-    `dishwasher`,
-    `parking`,
-    `washer`,
-    `elevator`,
-    `conditioner`
-  ],
-  DESCRIPTION: ``,
-  PHOTOS: [
-    `http://o0.github.io/assets/images/tokyo/hotel1.jpg`,
-    `http://o0.github.io/assets/images/tokyo/hotel2.jpg`,
-    `http://o0.github.io/assets/images/tokyo/hotel3.jpg`]
-};
-const LOCATION = {
-  MAX_X: 900,
-  MIN_X: 300,
-  MAX_Y: 900,
-  MIN_Y: 150
-};
-const DATE_INTERVAL = -7;
+const {AVATAR_URL, OFFER, LOCATION, DATE_INTERVAL} = require(`../data/keksobooking`);
 
 const generateRandomNumber = (max, min) => {
   return Math.floor(Math.random() * (max + 1 - min)) + min;
@@ -68,6 +14,13 @@ const shuffleArray = (array) => {
       return generateRandomNumber(1, 0);
     });
   return newArray;
+};
+const addDays = (date, days) => {
+  let result = new Date(date);
+  result.setDate(result.getDate() + days);
+  result = Date.UTC(result.getUTCFullYear(), result.getUTCMonth(), result.getUTCDate(),
+      result.getUTCHours(), result.getUTCMinutes(), result.getUTCSeconds(), result.getUTCMilliseconds());
+  return result;
 };
 
 const generateAvatar = () => {
@@ -85,9 +38,8 @@ const generateFeatures = () => {
   return newFeatures;
 };
 const generateDate = () => {
-  let date = new Date();
   let max = Date.now();
-  let min = date.setDate(DATE_INTERVAL);
+  let min = addDays(max, DATE_INTERVAL);
   return generateRandomNumber(max, min);
 };
 

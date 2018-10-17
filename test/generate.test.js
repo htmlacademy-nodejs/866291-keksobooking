@@ -66,14 +66,14 @@ class KeksobokingData {
 }
 
 describe(`Generate JSON command`, function () {
-  it(`should fail on non existing folder`, function () {
+  it(`Should create new file`, function () {
     const tempFileName = `${__dirname}/json/testfile.json`;
 
     return generateCommand.execute(COMMAND, QUANTITY_OBJECT, tempFileName)
       .then(() => assert.fail(`Path ${tempFileName} should not be available`))
       .catch((e) => assert.ok(e));
   });
-  it(`check JSON file`, function () {
+  it(`Check JSON file`, function () {
     const tempFileName = `${__dirname}/json/testfile.json`;
 
     let testJSON = require(tempFileName);

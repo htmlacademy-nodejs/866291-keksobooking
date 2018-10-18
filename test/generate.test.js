@@ -2,14 +2,10 @@
 
 const assert = require(`assert`);
 const path = require(`path`);
-const fs = require(`fs`);
-const {promisify} = require(`util`);
 
 const generateCommand = require(`../src/commands/generate`);
 const {OFFER, LOCATION} = require(`../src/data/keksobooking`);
 
-const access = promisify(fs.access);
-const unlink = promisify(fs.unlink);
 
 const COMMAND = ``;
 const QUANTITY_OBJECT = 2;
@@ -79,14 +75,6 @@ describe(`Generate JSON command`, function () {
     return generateCommand.execute(COMMAND, QUANTITY_OBJECT, tempFileName)
       .then(() => assert.fail(`Path ${tempFileName} should not be available`))
       .catch((e) => assert.ok(e));
-  });
-
-  it(`should create new file`, function () {
-    const tempFileName = path.resolve(`test`, `testfile.json`);
-
-    return generateCommand.execute(COMMAND, QUANTITY_OBJECT, tempFileName)
-      .then(access(tempFileName))
-      .then(unlink(tempFileName));
   });
   it(`Check JSON file`, function () {
     const tempFileName = path.resolve(`test`, `json`, `testfile.json`);

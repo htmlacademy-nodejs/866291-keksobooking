@@ -17,8 +17,11 @@ const rl = readline.createInterface({
 
 const data = [];
 const fileWriteOptions = {encoding: `utf-8`, mode: 0o644};
+let quantityNew = 1;
+let pathFileNew = DEFAULT_PATH;
 const enterNumberConsole = (answer) => {
   if (answer >= 0) {
+    quantityNew = answer;
     rl.question(`Введите путь к файлу : `, enterPathFile);
   } else if (answer.match(/^e(nd)?$/i)) {
     rl.close();
@@ -28,7 +31,7 @@ const enterNumberConsole = (answer) => {
 };
 const enterPathFile = (answer) => {
   if (answer) {
-    rl.close();
+    executeFun(quantityNew, pathFileNew);
   } else if (answer.match(/^e(nd)?$/i)) {
     rl.close();
   } else {

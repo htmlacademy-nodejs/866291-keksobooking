@@ -49,11 +49,11 @@ const enterPathFile = (answer) => {
   if (fileExists(answer)) {
     pathFileNew = answer;
     rl.question(`Перезаписать файл? (yes/no) : `, enterAcceptFile);
+  } else if (answer.match(/^e(nd)?$/i)) {
+    rl.close();
   } else if (answer) {
     pathFileNew = answer;
     writeFileReturn();
-    rl.close();
-  } else if (answer.match(/^e(nd)?$/i)) {
     rl.close();
   } else {
     rl.question(`Введите путь правильно или закройте програму командой end : `, enterPathFile);

@@ -9,6 +9,7 @@ const {OFFER, LOCATION} = require(`../src/data/keksobooking`);
 
 const COMMAND = ``;
 const QUANTITY_OBJECT = 2;
+const IS_TEST = true;
 
 class KeksobokingData {
   constructor(obejct) {
@@ -72,7 +73,7 @@ describe(`Generate JSON command`, () => {
   it(`should fail on non existing folder`, () => {
     const tempFileName = path.resolve(`test`, `json`, `testfile.json`);
 
-    return generateCommand.execute(COMMAND, QUANTITY_OBJECT, tempFileName)
+    return generateCommand.execute(COMMAND, QUANTITY_OBJECT, tempFileName, IS_TEST)
       .then(() => assert.fail(`Path ${tempFileName} should not be available`))
       .catch((e) => assert.ok(e));
   });

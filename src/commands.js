@@ -11,6 +11,7 @@ const commands = [
   require(`./commands/license`),
   require(`./commands/description`),
   require(`./commands/generate`),
+  require(`./commands/server`),
   require(`./commands/default`),
 ];
 const DEFAULT_COMMAND = `default`;
@@ -32,14 +33,20 @@ const enterAccept = (answer) => {
     rl.question(`Cгенерировать данные? (yes/no) : `, enterAccept);
   }
 };
+
 module.exports = {
-  check(command) {
+  check(args) {
+    const command = args[0];
     if (!command) {
       console.log(`Привет пользователь!\nЭта программа будет запускать сервер «${packageInfo.name.green}».\nАвтор: ${packageInfo.author.blue}.`);
       rl.question(`Cгенерировать данные? (yes/no) : `, enterAccept);
     } else {
       rl.pause();
-      commands.find((item) => isApplicable(item, command)).execute(command);
+      if (args.length > 1) {
+        commands.find((item) => isApplicable(item, command)).execute(command, args[1]);
+      } else {
+        commands.find((item) => isApplicable(item, command)).execute(command);
+      }
     }
   }
 };

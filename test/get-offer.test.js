@@ -6,6 +6,8 @@ const assert = require(`assert`);
 const app = require(`../src/commands/server`).app;
 const DATE = 1540277831463;
 const DATE_FAIL = 1;
+const SKIP = 1;
+const LIMIT = 2;
 
 describe(`GET /api/offers`, () => {
   it(`get all offer`, async () => {
@@ -17,7 +19,7 @@ describe(`GET /api/offers`, () => {
       expect(`Content-Type`, /json/);
 
     const offer = response.body;
-    assert.equal(offer.length, 5);
+    assert.equal(offer.data.length, offer.total);
   });
 
   it(`get all offers with / at the end`, async () => {
@@ -29,7 +31,21 @@ describe(`GET /api/offers`, () => {
       expect(`Content-Type`, /json/);
 
     const offer = response.body;
-    assert.equal(offer.length, 5);
+    assert.equal(offer.data.length, offer.total);
+  });
+
+  it(`get all offers with params`, async () => {
+
+    const response = await request(app).
+      get(`/api/offers/?skip=${SKIP}&limit=${LIMIT}`).
+      set(`Accept`, `application/json`).
+      expect(200).
+      expect(`Content-Type`, /json/);
+
+    const offer = response.body;
+    assert.equal(offer.skip, SKIP);
+    assert.equal(offer.limit, LIMIT);
+    assert.equal(offer.data.length, offer.total);
   });
 
   it(`get data from unknown resource`, async () => {

@@ -8,10 +8,13 @@ const offerRouter = express.Router();
 
 const IllegalArgumentError = require(`../error/illegal-argument-error`);
 const NotFoundError = require(`../error/not-found-error`);
+const ValidationError = require(`../error/validation-error`);
 
-const offer = path.resolve(`keksobooking.json`);
+const offerPath = path.resolve(`keksobooking.json`);
+const offer = require(offerPath);
 
 offerRouter.get(``, (req, res) => {
+  console.log(offer);
   res.send(offer);
 });
 
@@ -31,4 +34,9 @@ offerRouter.get(`/:date`, (req, res) => {
   res.send(found);
 });
 
+offerRouter.use((err, req, res, _next) => {
+  if (err instanceof ValidationError) {
+    res.status(err.code).json(err.errors);
+  }
+});
 module.exports = offerRouter;

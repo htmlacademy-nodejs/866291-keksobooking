@@ -4,7 +4,7 @@ const request = require(`supertest`);
 const assert = require(`assert`);
 
 const app = require(`../src/commands/server`).app;
-const DATE = 1539755469933;
+const DATE = 1540277831463;
 const DATE_FAIL = 1;
 
 describe(`GET /api/offer`, () => {
@@ -34,7 +34,7 @@ describe(`GET /api/offer`, () => {
 
   it(`get data from unknown resource`, async () => {
     return await request(app).
-      get(`/api/oneone`).
+      get(`/api/none`).
       set(`Accept`, `application/json`).
       expect(404).
       expect(`Page was not found`).

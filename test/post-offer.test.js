@@ -50,6 +50,7 @@ describe(`POST /api/offers`, () => {
     const offer = response.body;
     assert.deepEqual(offer, RETURN_OFFER);
   });
+
   it(`send offer without name`, async () => {
 
     const response = await request(app).
@@ -83,6 +84,7 @@ describe(`POST /api/offers`, () => {
     const offer = response.body;
     assert.deepEqual(offer, {name: offerName});
   });
+
   it(`send offer with avatar as multipart/form-data`, async () => {
 
     const offerName = `Superoffer`;

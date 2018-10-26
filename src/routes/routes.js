@@ -21,6 +21,7 @@ const jsonParser = express.json();
 const isNumber = (n) => {
   return !isNaN(parseFloat(n)) && isFinite(n);
 };
+
 const getObjectOffers = (array, skip, limit) => {
   return {
     'data': array.slice(skip, skip + limit),
@@ -31,6 +32,7 @@ const getObjectOffers = (array, skip, limit) => {
 };
 
 module.exports = (app) => {
+
   app.get(`/api/offers`, (req, res) => {
     let skip = DEFAULT_SKIP;
     let limit = DEFAUL_LIMIT;
@@ -42,6 +44,7 @@ module.exports = (app) => {
     }
     res.send(getObjectOffers(offer, skip, limit));
   });
+
   app.get(`/api/offers/:date`, (req, res) => {
     const offerDate = req.params.date;
     if (!offerDate) {
@@ -58,6 +61,7 @@ module.exports = (app) => {
 
     res.send(found);
   });
+
   app.post(`/api/offers`, jsonParser, upload.single(`avatar`), (req, res) => {
     const body = req.body;
     const avatar = req.file;
@@ -74,6 +78,7 @@ module.exports = (app) => {
 
     res.send(validate(body));
   });
+
   app.use((err, req, res, _next) => {
     if (err instanceof ValidationError) {
       res.status(err.code).json(err.errors);

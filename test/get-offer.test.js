@@ -7,29 +7,29 @@ const app = require(`../src/commands/server`).app;
 const DATE = 1540277831463;
 const DATE_FAIL = 1;
 
-describe(`GET /api/offer`, () => {
+describe(`GET /api/offers`, () => {
   it(`get all offer`, async () => {
 
     const response = await request(app).
-      get(`/api/offer`).
+      get(`/api/offers`).
       set(`Accept`, `application/json`).
       expect(200).
       expect(`Content-Type`, /json/);
 
     const offer = response.body;
-    assert.equal(offer.length, 17);
+    assert.equal(offer.length, 5);
   });
 
-  it(`get all offer with / at the end`, async () => {
+  it(`get all offers with / at the end`, async () => {
 
     const response = await request(app).
-      get(`/api/offer/`).
+      get(`/api/offers/`).
       set(`Accept`, `application/json`).
       expect(200).
       expect(`Content-Type`, /json/);
 
     const offer = response.body;
-    assert.equal(offer.length, 17);
+    assert.equal(offer.length, 5);
   });
 
   it(`get data from unknown resource`, async () => {
@@ -43,10 +43,10 @@ describe(`GET /api/offer`, () => {
 
 });
 
-describe(`GET /api/offer/:date`, () => {
+describe(`GET /api/offers/:date`, () => {
   it(`get date ${DATE}`, async () => {
     const response = await request(app).
-      get(`/api/offer/${encodeURI(`${DATE}`)}`).
+      get(`/api/offers/${encodeURI(`${DATE}`)}`).
       set(`Accept`, `application/json`).
       expect(200).
       expect(`Content-Type`, /json/);
@@ -57,7 +57,7 @@ describe(`GET /api/offer/:date`, () => {
 
   xit(`get unknown date format`, async () => {
     return request(app).
-      get(`/api/offer/${encodeURI(`test123`)}`).
+      get(`/api/offers/${encodeURI(`test123`)}`).
       set(`Accept`, `application/json`).
       expect(404).
       expect(`неверный формат запроса`).
@@ -66,7 +66,7 @@ describe(`GET /api/offer/:date`, () => {
 
   xit(`get unknown date with ${DATE_FAIL}`, async () => {
     return request(app).
-      get(`/api/offer/${encodeURI(`${DATE_FAIL}`)}`).
+      get(`/api/offers/${encodeURI(`${DATE_FAIL}`)}`).
       set(`Accept`, `application/json`).
       expect(404).
       expect(`обьект с <<${DATE_FAIL}>> не найден`).

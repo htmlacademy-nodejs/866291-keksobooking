@@ -2,7 +2,6 @@
 
 const express = require(`express`);
 const path = require(`path`);
-const offerRouters = require(`../api/offer`);
 const app = express();
 
 const SERVER_COMMAND = `--server`;
@@ -36,13 +35,13 @@ const ERROR_HANDLER = (err, req, res, _next) => {
 
 app.use(express.static(path.resolve(`static`)));
 
-app.use(`/api/offer`, offerRouters);
-
-app.use(BAD_REQUEST);
+require(`../routes/routes`)(app);
 
 app.use(NOT_FOUND_HANDLER);
 
 app.use(ERROR_HANDLER);
+
+app.use(BAD_REQUEST);
 
 const runServer = (port) => {
 
@@ -57,7 +56,8 @@ module.exports = {
   execute(command, port = PORT) {
     port = checkPort(port);
     runServer(port);
-  }
+  },
+  app
 };
 
 if (require.main === module) {

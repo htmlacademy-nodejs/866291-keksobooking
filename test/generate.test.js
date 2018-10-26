@@ -18,53 +18,23 @@ class KeksobokingData {
     this.location = obejct.location;
     this.date = obejct.date;
   }
-  checkValue() {
-    describe(`Check KeksobokingData`, () => {
-      it(`Check author.avatar`, () => {
-        return assert.equal(typeof this.author.avatar, `string`, this.author.avatar);
-      });
-      it(`Check offer.title`, () => {
-        return assert(OFFER.TITLE.indexOf(this.offer.title) !== -1, this.offer.title);
-      });
-      it(`Check offer.addres`, () => {
-        return assert.equal(this.offer.addres, `${this.location.x}, ${this.location.y}`, this.offer.addres);
-      });
-      it(`Check offer.price`, () => {
-        return assert(this.offer.price <= OFFER.MAX_PRICE && this.offer.price >= OFFER.MIN_PRICE, this.offer.price);
-      });
-      it(`Check offer.type`, () => {
-        return assert(OFFER.TYPE.indexOf(this.offer.type) !== -1, this.offer.type);
-      });
-      it(`Check offer.rooms`, () => {
-        return assert(this.offer.rooms <= OFFER.MAX_ROOMS && this.offer.rooms >= OFFER.MIN_ROOMS, this.offer.rooms);
-      });
-      it(`Check offer.guests`, () => {
-        return assert(this.offer.guests <= OFFER.MAX_GUESTS && this.offer.guests >= OFFER.MIN_GUESTS, this.offer.rooms);
-      });
-      it(`Check offer.checkin`, () => {
-        return assert(OFFER.CHECKIN.indexOf(this.offer.checkin) !== -1, this.offer.checkin);
-      });
-      it(`Check offer.checkout`, () => {
-        return assert(OFFER.CHECKOUT.indexOf(this.offer.checkout) !== -1, this.offer.checkout);
-      });
-      it(`Check offer.features`, () => {
-        return assert(this.offer.features !== undefined, this.offer.features);
-      });
-      it(`Check offer.description`, () => {
-        return assert(this.offer.description === OFFER.DESCRIPTION, this.offer.description);
-      });
-      it(`Check offer.photos`, () => {
-        return assert(this.offer.photos !== undefined, this.offer.photos);
-      });
-      it(`Check location.x`, () => {
-        return assert(this.location.x <= LOCATION.MAX_X && this.location.x >= LOCATION.MIN_X, this.location.x);
-      });
-      it(`Check location.y`, () => {
-        return assert(this.location.y <= LOCATION.MAX_Y && this.location.y >= LOCATION.MIN_Y, this.location.y);
-      });
-      it(`Check date`, () => {
-        return assert(this.date !== undefined, this.date);
-      });
+  checkValue(index = 0) {
+    it(`Check data [${index}]`, () => {
+      assert.equal(typeof this.author.avatar, `string`, this.author.avatar);
+      assert(OFFER.TITLE.indexOf(this.offer.title) !== -1, this.offer.title);
+      assert.equal(this.offer.addres, `${this.location.x}, ${this.location.y}`, this.offer.addres);
+      assert(this.offer.price <= OFFER.MAX_PRICE && this.offer.price >= OFFER.MIN_PRICE, this.offer.price);
+      assert(OFFER.TYPE.indexOf(this.offer.type) !== -1, this.offer.type);
+      assert(this.offer.rooms <= OFFER.MAX_ROOMS && this.offer.rooms >= OFFER.MIN_ROOMS, this.offer.rooms);
+      assert(this.offer.guests <= OFFER.MAX_GUESTS && this.offer.guests >= OFFER.MIN_GUESTS, this.offer.rooms);
+      assert(OFFER.CHECKIN.indexOf(this.offer.checkin) !== -1, this.offer.checkin);
+      assert(OFFER.CHECKOUT.indexOf(this.offer.checkout) !== -1, this.offer.checkout);
+      assert(this.offer.features !== undefined, this.offer.features);
+      assert(this.offer.description === OFFER.DESCRIPTION, this.offer.description);
+      assert(this.offer.photos !== undefined, this.offer.photos);
+      assert(this.location.x <= LOCATION.MAX_X && this.location.x >= LOCATION.MIN_X, this.location.x);
+      assert(this.location.y <= LOCATION.MAX_Y && this.location.y >= LOCATION.MIN_Y, this.location.y);
+      assert(this.date !== undefined, this.date);
     });
   }
 }
@@ -81,9 +51,13 @@ describe(`Generate JSON command`, () => {
     const tempFileName = path.resolve(`test`, `json`, `testfile.json`);
 
     let testJSON = require(tempFileName);
-    for (let item of testJSON) {
-      let testObject = new KeksobokingData(item);
-      testObject.checkValue();
-    }
+    let index = 0;
+    describe(`Check KeksobokingData`, () => {
+      for (let item of testJSON) {
+        let testObject = new KeksobokingData(item);
+        testObject.checkValue(index);
+        index++;
+      }
+    });
   });
 });

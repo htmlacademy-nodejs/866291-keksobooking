@@ -1,16 +1,22 @@
 'use strict';
 
 const path = require(`path`);
+const express = require(`express`);
+const multer = require(`multer`);
 
 const IllegalArgumentError = require(`../error/illegal-argument-error`);
 const NotFoundError = require(`../error/not-found-error`);
 const ValidationError = require(`../error/validation-error`);
+const validate = require(`./validate`);
 
 const offerPath = path.resolve(`keksobooking.json`);
 const offer = require(offerPath);
 
 const DEFAULT_SKIP = 0;
 const DEFAUL_LIMIT = 20;
+
+const upload = multer({storage: multer.memoryStorage()});
+const jsonParser = express.json();
 
 const isNumber = (n) => {
   return !isNaN(parseFloat(n)) && isFinite(n);
@@ -51,6 +57,22 @@ module.exports = (app) => {
     }
 
     res.send(found);
+  });
+  app.post(`/api/offers`, jsonParser, upload.single(`avatar`), (req, res) => {
+    const body = req.body;
+    const avatar = req.file;
+    if (avatar) {
+      body.avatar = {name: avatar.originalname};
+    }
+    if (body && body.address) {
+      const adress = body.address.split(`, `);
+      body.location = {
+        "x": parseInt(adress[0], 10),
+        "y": parseInt(adress[1], 10)
+      };
+    }
+
+    res.send(validate(body));
   });
   app.use((err, req, res, _next) => {
     if (err instanceof ValidationError) {

@@ -1,20 +1,8 @@
 'use strict';
 
 const {AVATAR_URL, OFFER, LOCATION, DATE_INTERVAL} = require(`../data/keksobooking`);
+const {generateRandomNumber, takeArrayElement, shuffleArray} = require(`../data/randomValue`);
 
-const generateRandomNumber = (max, min) => {
-  return Math.floor(Math.random() * (max + 1 - min)) + min;
-};
-const takeArrayElement = (array = []) => {
-  return array[generateRandomNumber(array.length - 1, 0)];
-};
-const shuffleArray = (array) => {
-  let newArray = array.slice()
-    .sort(() => {
-      return generateRandomNumber(1, 0);
-    });
-  return newArray;
-};
 const addDays = (date, days) => {
   let result = new Date(date);
   result.setDate(result.getDate() + days);

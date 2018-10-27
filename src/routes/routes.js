@@ -68,14 +68,6 @@ module.exports = (app) => {
     if (avatar) {
       body.avatar = {name: avatar.originalname};
     }
-    if (body && body.address) {
-      const adress = body.address.split(`, `);
-      body.location = {
-        "x": parseInt(adress[0], 10),
-        "y": parseInt(adress[1], 10)
-      };
-    }
-
     res.send(validate(body));
   });
 

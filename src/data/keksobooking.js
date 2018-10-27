@@ -60,7 +60,7 @@ module.exports = {
       `title`,
       `type`,
       `price`,
-      `adress`,
+      `address`,
       `checkin`,
       `checkout`,
       `rooms`

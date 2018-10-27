@@ -17,23 +17,11 @@ const TEST_OFFER = {
   "checkout": `7:00`,
   "features": [`elevator`, `conditioner`]
 };
-const RETURN_OFFER = {
-  "name": `Pavel`,
-  "title": `Маленькая квартирка рядом с парком`,
-  "address": `570, 472`,
-  "description": `Маленькая чистая квратира на краю парка. Без интернета, регистрации и СМС.`,
-  "price": 30000,
-  "type": `flat`,
-  "rooms": 1,
-  "guests": 1,
-  "checkin": `9:00`,
-  "checkout": `7:00`,
-  "features": [`elevator`, `conditioner`],
-  "location": {
-    "x": 570,
-    "y": 472
-  }
-};
+const RETURN_OFFER = Object.assign({}, TEST_OFFER, {"location": {
+  "x": 570,
+  "y": 472
+}});
+const RETURN_OFFER_AVATAR = Object.assign({}, RETURN_OFFER, {"avatar": {"name": `walrussmoke.png`}});
 
 describe(`POST /api/offers`, () => {
   it(`send offer as json`, async () => {
@@ -64,17 +52,15 @@ describe(`POST /api/offers`, () => {
 
     const errors = response.body;
     assert.deepEqual(errors, [
-      `Field name "name" is required!`
+      `Пустая строка!`
     ]);
   });
 
   it(`send offer as multipart/form-data`, async () => {
 
-    const offerName = TEST_OFFER.name;
-
     const response = await request(app).
       post(`/api/offers`).
-      field(`name`, offerName).
+      field(TEST_OFFER).
       set(`Accept`, `application/json`).
       set(`Content-Type`, `multipart/form-data`).
       expect(200).
@@ -82,16 +68,14 @@ describe(`POST /api/offers`, () => {
 
 
     const offer = response.body;
-    assert.deepEqual(offer, {name: offerName});
+    assert.deepEqual(offer, RETURN_OFFER);
   });
 
   it(`send offer with avatar as multipart/form-data`, async () => {
 
-    const offerName = `Superoffer`;
-
     const response = await request(app).
       post(`/api/offers`).
-      field(`name`, offerName).
+      field(TEST_OFFER).
       attach(`avatar`, `test/img/walrussmoke.png`).
       set(`Accept`, `application/json`).
       set(`Content-Type`, `multipart/form-data`).
@@ -100,7 +84,7 @@ describe(`POST /api/offers`, () => {
 
 
     const offer = response.body;
-    assert.deepEqual(offer, {name: offerName, avatar: {name: `walrussmoke.png`}});
+    assert.deepEqual(offer, RETURN_OFFER_AVATAR);
   });
 
 });

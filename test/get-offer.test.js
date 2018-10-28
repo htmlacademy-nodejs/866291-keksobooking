@@ -4,14 +4,13 @@ const request = require(`supertest`);
 const assert = require(`assert`);
 
 const app = require(`../src/commands/server`).app;
-const DATE = 1540277831463;
+const DATE = 1540388535674;
 const DATE_FAIL = 1;
 const SKIP = 1;
 const LIMIT = 2;
 
 describe(`GET /api/offers`, () => {
   it(`get all offer`, async () => {
-
     const response = await request(app).
       get(`/api/offers`).
       set(`Accept`, `application/json`).
@@ -19,6 +18,7 @@ describe(`GET /api/offers`, () => {
       expect(`Content-Type`, /json/);
 
     const offer = response.body;
+
     assert.equal(offer.data.length, offer.total);
   });
 

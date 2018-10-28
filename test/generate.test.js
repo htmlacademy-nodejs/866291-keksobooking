@@ -8,7 +8,7 @@ const {OFFER, LOCATION} = require(`../src/data/keksobooking`);
 
 
 const COMMAND = ``;
-const QUANTITY_OBJECT = 2;
+const QUANTITY_OBJECT = 0;
 const IS_TEST = true;
 
 class KeksobokingData {

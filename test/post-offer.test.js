@@ -87,5 +87,7 @@ describe(`POST /api/offers`, () => {
     assert.deepEqual(offer, RETURN_OFFER_AVATAR);
   });
 
+}).timeout(() => {
+  console.log(1);
 });
 

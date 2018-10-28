@@ -2,12 +2,17 @@
 
 const express = require(`express`);
 const path = require(`path`);
+const mongoose = require(`mongoose`);
+const config = require(`../config/config`);
 const app = express();
 
 const SERVER_COMMAND = `--server`;
 const MAX_PORT = 49151;
 const MIN_PORT = 1024;
 const PORT = 3000;
+
+mongoose.connect(config.db);
+mongoose.Promise = global.Promise;
 
 const checkPort = (port) => {
   if (port >= MIN_PORT && port <= MAX_PORT) {

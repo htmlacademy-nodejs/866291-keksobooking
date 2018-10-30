@@ -2,12 +2,14 @@
 
 const express = require(`express`);
 const multer = require(`multer`);
+const toStream = require(`buffer-to-stream`);
 
 const IllegalArgumentError = require(`../error/illegal-argument-error`);
 const NotFoundError = require(`../error/not-found-error`);
 const ValidationError = require(`../error/validation-error`);
 const validate = require(`./validate`);
 const KeksobukingData = require(`../models/KeksobookingData`);
+const imgStore = require(`../images/store`);
 
 const DEFAULT_SKIP = 0;
 const DEFAUL_LIMIT = 20;
@@ -65,6 +67,7 @@ module.exports = (app) => {
     const avatar = req.file;
     if (avatar) {
       body.avatar = {name: avatar.originalname};
+      imgStore.save(body.avatar.name, toStream(avatar.buffer));
     }
     return res.send(validate(body, res, next));
   });

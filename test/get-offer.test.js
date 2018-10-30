@@ -4,7 +4,7 @@ const request = require(`supertest`);
 const assert = require(`assert`);
 
 const app = require(`../src/commands/server`).app;
-const DATE = 1540868311186;
+const DATE = 1540873946269;
 const DATE_FAIL = 1;
 const SKIP = 1;
 const LIMIT = 2;

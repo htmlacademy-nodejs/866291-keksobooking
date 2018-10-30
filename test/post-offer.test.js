@@ -17,12 +17,60 @@ const TEST_OFFER = {
   "checkout": `7:00`,
   "features": [`elevator`, `conditioner`]
 };
-const RETURN_OFFER = Object.assign({}, TEST_OFFER, {"location": {
-  "x": 570,
-  "y": 472
-}});
+const RETURN_OFFER = Object.assign({}, TEST_OFFER, {
+  "location": {
+    "x": 570,
+    "y": 472
+  }
+});
 
 describe(`POST /api/offers`, () => {
+  it(`send offer as json`, async () => {
+
+    const response = await request(app).
+      post(`/api/offers`).
+      send(TEST_OFFER).
+      set(`Accept`, `application/json`).
+      set(`Content-Type`, `application/json`).
+      expect(200).
+      expect(`Content-Type`, /json/);
+
+
+    const offer = response.body;
+    assert.deepEqual(offer, RETURN_OFFER);
+  });
+
+  it(`send offer without name`, async () => {
+
+    const response = await request(app).
+      post(`/api/offers`).
+      send({}).
+      set(`Accept`, `application/json`).
+      set(`Content-Type`, `application/json`).
+      expect(400).
+      expect(`Content-Type`, /json/);
+
+
+    const errors = response.body;
+    assert.deepEqual(errors, [
+      `Пустая строка!`
+    ]);
+  });
+
+  it(`send offer as multipart/form-data`, async () => {
+
+    const response = await request(app).
+      post(`/api/offers`).
+      field(TEST_OFFER).
+      set(`Accept`, `application/json`).
+      set(`Content-Type`, `multipart/form-data`).
+      expect(200).
+      expect(`Content-Type`, /json/);
+
+
+    const offer = response.body;
+    assert.deepEqual(offer, RETURN_OFFER);
+  });
 
   it(`send offer with avatar as multipart/form-data`, async () => {
 
@@ -40,7 +88,5 @@ describe(`POST /api/offers`, () => {
     assert.deepEqual(offer, RETURN_OFFER);
   });
 
-}).timeout(() => {
-  console.log(1);
 });
 

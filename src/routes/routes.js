@@ -8,8 +8,6 @@ const NotFoundError = require(`../error/not-found-error`);
 const ValidationError = require(`../error/validation-error`);
 const validate = require(`./validate`);
 const Keksobooking = require(`../models/keksobooking.model`);
-const Offer = require(`../models/Offer`);
-const imgStore = require(`../images/store`);
 
 const DEFAULT_SKIP = 0;
 const DEFAUL_LIMIT = 20;
@@ -41,7 +39,7 @@ module.exports = (app) => {
     return Keksobooking.find()
       .exec()
       .then((data) => {
-        return res.send(getObjectOffers(data, skip, limit));
+        return res.json(getObjectOffers(data, skip, limit));
       })
       .catch((err) => next(err));
   });
@@ -63,30 +61,17 @@ module.exports = (app) => {
       });
   });
 
-  app.post(`/api/offers`, jsonParser, upload.single(`avatar`), asyncMiddleware(async (req, res, next) => {
-    const body = req.body;
-    const avatar = req.file;
-    const data = await validate(body);
-    let keksobooking = new Keksobooking();
-    res.send(await keksobooking.addOffer(data, avatar, res, next));
-  }));
-  app.get(`/:name/avatar`, asyncMiddleware(async (req, res) => {
-    const wizardName = req.params.name;
-    if (!wizardName) {
-      throw new IllegalArgumentError(`В запросе не указано имя`);
+  app.get(`/api/offers/:date/avatar`, asyncMiddleware(async (req, res) => {
+    const date = req.params.date;
+    if (!date) {
+      throw new IllegalArgumentError(`В запросе не указана дата`);
     }
-
-    const name = wizardName;
-    const found = await Offer.getWizard(name);
-
-    if (!found) {
-      throw new NotFoundError(`Маг с именем "${wizardName}" не найден`);
-    }
-
-    const result = await imgStore.get(found._id);
-    if (!result) {
-      throw new NotFoundError(`Аватар для пользователя "${wizardName}" не найден`);
-    }
+    const result = await Keksobooking.findOne({"date": date})
+      .then((item) => {
+        return item.getImage();
+      }).catch(() => {
+        throw new NotFoundError(`Пользователь не найден "${date}"`);
+      });
 
     res.header(`Content-Type`, `image/jpg`);
     res.header(`Content-Length`, result.info.length);
@@ -97,6 +82,14 @@ module.exports = (app) => {
     stream.on(`error`, (e) => console.error(e));
     stream.on(`end`, () => res.end());
     stream.pipe(res);
+  }));
+
+  app.post(`/api/offers`, jsonParser, upload.single(`avatar`), asyncMiddleware(async (req, res, next) => {
+    const body = req.body;
+    const avatar = req.file;
+    const data = await validate(body);
+    let keksobooking = new Keksobooking();
+    res.send(await keksobooking.addOffer(data, avatar, res, next));
   }));
 
   app.use((err, req, res, _next) => {

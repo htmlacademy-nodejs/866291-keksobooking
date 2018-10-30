@@ -5,6 +5,8 @@ const {VALID} = require(`../data/keksobooking`);
 const {takeArrayElement} = require(`../data/randomValue`);
 const toStream = require(`buffer-to-stream`);
 const imgStore = require(`../images/store`);
+const ValidationError = require(`../error/validation-error`);
+const NotFoundError = require(`../error/not-found-error`);
 
 const KeksobookingSchema = new mongoose.Schema({
   author: {
@@ -26,7 +28,7 @@ const KeksobookingSchema = new mongoose.Schema({
       type: String,
       default: ``
     },
-    addres: {
+    address: {
       type: String,
       default: ``
     },
@@ -79,7 +81,7 @@ const KeksobookingSchema = new mongoose.Schema({
   }
 });
 
-KeksobookingSchema.methods.addOffer = async function (offer, avatar, res, next) {
+KeksobookingSchema.methods.addOffer = async function (offer, avatar) {
   this.offer = offer;
   const address = offer.address.split(`, `);
   if (offer.name.length !== ``) {
@@ -94,11 +96,23 @@ KeksobookingSchema.methods.addOffer = async function (offer, avatar, res, next) 
   };
   if (avatar) {
     this.author.avatar = `api/offers/${this.date}/avatar`;
-    await imgStore.save(avatar.originalname, toStream(avatar.buffer));
+    await imgStore.save(this._id, toStream(avatar.buffer)).catch((err) => {
+      throw new ValidationError(err);
+    });
   }
   await this.save()
-    .then(() => res.json(offer))
-    .catch((err) => next(err));
-  return Object.assign(this.offer, this.location);
+    .catch((err) => {
+      throw new ValidationError(err);
+    });
+  const data = Object.assign({}, this.offer, {location: {x: this.location.x, y: this.location.y}}, {name: this.author.name});
+  return data;
+};
+KeksobookingSchema.methods.getImage = async function () {
+  return await imgStore.get(this._id).then((stream) => {
+    return stream;
+  })
+    .catch(() => {
+      throw new NotFoundError(`Аватар для "${this.author.name}" не найден`);
+    });
 };
 module.exports = mongoose.model(`keksobooking`, KeksobookingSchema);

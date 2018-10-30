@@ -3,13 +3,12 @@
 const ValidationError = require(`../error/validation-error`);
 const {VALID} = require(`../data/keksobooking`);
 const {takeArrayElement} = require(`../data/randomValue`);
-const Offer = require(`../models/Offer`);
 const errorThrow = (errors) => {
   if (errors.length > 0) {
     throw new ValidationError(errors);
   }
 };
-const validate = (data, res, next) => {
+const validate = (data) => {
   const errors = [];
   if (Object.keys(data).length === 0 || data.length === 0) {
     errors.push(`Пустая строка!`);
@@ -57,11 +56,6 @@ const validate = (data, res, next) => {
     data.name = takeArrayElement(VALID.NAME);
   }
   errorThrow(errors);
-  let offer = new Offer();
-  Object.assign(offer, data);
-  offer.save()
-    .then(() => res.json(offer))
-    .catch((err) => next(err));
   return data;
 };
 

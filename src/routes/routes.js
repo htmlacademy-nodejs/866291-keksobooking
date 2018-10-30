@@ -2,17 +2,18 @@
 
 const express = require(`express`);
 const multer = require(`multer`);
-const toStream = require(`buffer-to-stream`);
 
 const IllegalArgumentError = require(`../error/illegal-argument-error`);
 const NotFoundError = require(`../error/not-found-error`);
 const ValidationError = require(`../error/validation-error`);
 const validate = require(`./validate`);
-const KeksobukingData = require(`../models/KeksobookingData`);
+const Keksobooking = require(`../models/keksobooking.model`);
+const Offer = require(`../models/Offer`);
 const imgStore = require(`../images/store`);
 
 const DEFAULT_SKIP = 0;
 const DEFAUL_LIMIT = 20;
+const asyncMiddleware = (fn) => (req, res, next) => fn(req, res, next).catch(next);
 
 const upload = multer({storage: multer.memoryStorage()});
 const jsonParser = express.json();
@@ -37,7 +38,7 @@ module.exports = (app) => {
     if (req.query.limit) {
       limit = req.query.limit;
     }
-    return KeksobukingData.find()
+    return Keksobooking.find()
       .exec()
       .then((data) => {
         return res.send(getObjectOffers(data, skip, limit));
@@ -50,27 +51,53 @@ module.exports = (app) => {
     if (!offerDate) {
       throw new IllegalArgumentError(`В запросе не указана дата`);
     }
-    return KeksobukingData.findOne({
+    return Keksobooking.findOne({
       date: offerDate
     })
       .exec()
-      .then((keksobukingData) => {
-        return res.send(keksobukingData);
+      .then((keksobooking) => {
+        return res.send(keksobooking);
       })
       .catch(() => {
         throw new NotFoundError(`Обьект с датой "${offerDate}" не найден`);
       });
   });
 
-  app.post(`/api/offers`, jsonParser, upload.single(`avatar`), (req, res, next) => {
+  app.post(`/api/offers`, jsonParser, upload.single(`avatar`), asyncMiddleware(async (req, res, next) => {
     const body = req.body;
     const avatar = req.file;
-    if (avatar) {
-      body.avatar = {name: avatar.originalname};
-      imgStore.save(body.avatar.name, toStream(avatar.buffer));
+    const data = await validate(body);
+    let keksobooking = new Keksobooking();
+    res.send(await keksobooking.addOffer(data, avatar, res, next));
+  }));
+  app.get(`/:name/avatar`, asyncMiddleware(async (req, res) => {
+    const wizardName = req.params.name;
+    if (!wizardName) {
+      throw new IllegalArgumentError(`В запросе не указано имя`);
     }
-    return res.send(validate(body, res, next));
-  });
+
+    const name = wizardName;
+    const found = await Offer.getWizard(name);
+
+    if (!found) {
+      throw new NotFoundError(`Маг с именем "${wizardName}" не найден`);
+    }
+
+    const result = await imgStore.get(found._id);
+    if (!result) {
+      throw new NotFoundError(`Аватар для пользователя "${wizardName}" не найден`);
+    }
+
+    res.header(`Content-Type`, `image/jpg`);
+    res.header(`Content-Length`, result.info.length);
+
+    res.on(`error`, (e) => console.error(e));
+    res.on(`end`, () => res.end());
+    const stream = result.stream;
+    stream.on(`error`, (e) => console.error(e));
+    stream.on(`end`, () => res.end());
+    stream.pipe(res);
+  }));
 
   app.use((err, req, res, _next) => {
     if (err instanceof ValidationError) {

@@ -2,12 +2,12 @@
 
 const express = require(`express`);
 const multer = require(`multer`);
+const MongoError = require(`mongodb`).MongoError;
 
 const IllegalArgumentError = require(`../error/illegal-argument-error`);
 const NotFoundError = require(`../error/not-found-error`);
 const ValidationError = require(`../error/validation-error`);
 const validate = require(`./validate`);
-const Keksobooking = require(`../models/keksobooking.model`);
 
 const DEFAULT_SKIP = 0;
 const DEFAUL_LIMIT = 20;
@@ -16,33 +16,48 @@ const asyncMiddleware = (fn) => (req, res, next) => fn(req, res, next).catch(nex
 const upload = multer({storage: multer.memoryStorage()});
 const jsonParser = express.json();
 
-const getObjectOffers = (array, skip, limit) => {
+const getObjectOffers = (data, skip = DEFAULT_SKIP, limit = DEFAUL_LIMIT) => {
+  const total = parseInt(data.length || data.count(), 10);
   return {
-    'data': array.slice(skip, skip + limit),
+    'data': data.slice(skip, skip + limit),
     'skip': skip,
     'limit': limit,
-    'total': array.slice(skip, skip + limit).length
+    'total': total
   };
 };
 
-module.exports = (app) => {
 
-  app.get(`/api/offers`, (req, res, next) => {
-    let skip = DEFAULT_SKIP;
-    let limit = DEFAUL_LIMIT;
-    if (req.query.skip) {
-      skip = req.query.skip;
+const NOT_FOUND_HANDLER = (req, res) => {
+  res.status(404).send(`Page was not found`);
+};
+
+const ERROR_HANDLER = (err, req, res, _next) => {
+  console.error(err);
+  if (err instanceof ValidationError) {
+    res.status(err.code).json(err.errors);
+    return;
+  } else if (err instanceof MongoError) {
+    res.status(400).json(err.message);
+    return;
+  }
+  res.status(err.code || 500).send(err.message);
+};
+module.exports = (app, Keksobooking, KeksobookingShecma) => {
+
+  app.get(`/api/offers`, asyncMiddleware(async (req, res) => {
+    const skip = parseInt(req.query.skip || DEFAULT_SKIP, 10);
+    const limit = parseInt(req.query.limit || DEFAUL_LIMIT, 10);
+    if (isNaN(skip) || isNaN(limit)) {
+      throw new IllegalArgumentError(`Неверное значение параметра "skip" или "limit"`);
     }
-    if (req.query.limit) {
-      limit = req.query.limit;
-    }
-    return Keksobooking.find()
-      .exec()
+    await Keksobooking.find()
       .then((data) => {
-        return res.json(getObjectOffers(data, skip, limit));
+        res.send(getObjectOffers(data, skip, limit));
       })
-      .catch((err) => next(err));
-  });
+      .catch(() => {
+        throw new NotFoundError(`Обьекты не найдены`);
+      });
+  }));
 
   app.get(`/api/offers/:date`, (req, res) => {
     const offerDate = req.params.date;
@@ -52,7 +67,6 @@ module.exports = (app) => {
     return Keksobooking.findOne({
       date: offerDate
     })
-      .exec()
       .then((keksobooking) => {
         return res.send(keksobooking);
       })
@@ -62,15 +76,16 @@ module.exports = (app) => {
   });
 
   app.get(`/api/offers/:date/avatar`, asyncMiddleware(async (req, res) => {
-    const date = req.params.date;
-    if (!date) {
+    const offerDate = req.params.date;
+    if (!offerDate) {
       throw new IllegalArgumentError(`В запросе не указана дата`);
     }
-    const result = await Keksobooking.findOne({"date": date})
+    const result = await Keksobooking.findOne({date: offerDate})
+      .exec()
       .then((item) => {
         return item.getImage();
       }).catch(() => {
-        throw new NotFoundError(`Пользователь не найден "${date}"`);
+        throw new NotFoundError(`Обьект с датой "${offerDate}" не найден`);
       });
 
     res.header(`Content-Type`, `image/jpg`);
@@ -88,13 +103,11 @@ module.exports = (app) => {
     const body = req.body;
     const avatar = req.file;
     const data = await validate(body);
-    let keksobooking = new Keksobooking();
+    let keksobooking = new KeksobookingShecma();
     res.send(await keksobooking.addOffer(data, avatar, res, next));
   }));
 
-  app.use((err, req, res, _next) => {
-    if (err instanceof ValidationError) {
-      res.status(err.code).json(err.errors);
-    }
-  });
+  app.use(ERROR_HANDLER);
+
+  app.use(NOT_FOUND_HANDLER);
 };

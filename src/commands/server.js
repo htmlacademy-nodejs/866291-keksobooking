@@ -4,6 +4,7 @@ const express = require(`express`);
 const path = require(`path`);
 const mongoose = require(`mongoose`);
 const config = require(`../config/config`);
+const KeksobookingData = require(`../models/keksobooking.model`);
 const app = express();
 
 const SERVER_COMMAND = `--server`;
@@ -40,7 +41,7 @@ const ERROR_HANDLER = (err, req, res, _next) => {
 
 app.use(express.static(path.resolve(`static`)));
 
-require(`../routes/routes`)(app);
+require(`../routes/routes`)(app, KeksobookingData, KeksobookingData);
 
 app.use(NOT_FOUND_HANDLER);
 

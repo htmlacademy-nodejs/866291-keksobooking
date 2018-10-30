@@ -2,8 +2,11 @@
 
 const request = require(`supertest`);
 const assert = require(`assert`);
+const express = require(`express`);
 
-const app = require(`../src/commands/server`).app;
+const {keksobookingModelMock, KeksobookingModelMock} = require(`./mock/keksobooking-model-mock`);
+const app = express();
+require(`../src/routes/routes`)(app, keksobookingModelMock, KeksobookingModelMock);
 const TEST_OFFER = {
   "name": `Pavel`,
   "title": `Маленькая квартирка рядом с парком`,

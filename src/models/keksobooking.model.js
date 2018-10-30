@@ -115,4 +115,5 @@ KeksobookingSchema.methods.getImage = async function () {
       throw new NotFoundError(`Аватар для "${this.author.name}" не найден`);
     });
 };
+
 module.exports = mongoose.model(`keksobooking`, KeksobookingSchema);

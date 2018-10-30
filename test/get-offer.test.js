@@ -2,8 +2,12 @@
 
 const request = require(`supertest`);
 const assert = require(`assert`);
+const express = require(`express`);
 
-const app = require(`../src/commands/server`).app;
+const {keksobookingModelMock, KeksobookingModelMock} = require(`./mock/keksobooking-model-mock`);
+const app = express();
+require(`../src/routes/routes`)(app, keksobookingModelMock, KeksobookingModelMock);
+
 const DATE = 1540873946269;
 const DATE_FAIL = 1;
 const SKIP = 1;
@@ -19,7 +23,8 @@ describe(`GET /api/offers`, () => {
 
     const offer = response.body;
 
-    assert.equal(offer.data.length, offer.total);
+    assert.equal(offer.total, 5);
+    assert.equal(offer.data.length, 5);
   });
 
   it(`get all offers with / at the end`, async () => {
@@ -31,7 +36,8 @@ describe(`GET /api/offers`, () => {
       expect(`Content-Type`, /json/);
 
     const offer = response.body;
-    assert.equal(offer.data.length, offer.total);
+    assert.equal(offer.total, 5);
+    assert.equal(offer.data.length, 5);
   });
 
   it(`get all offers with params`, async () => {
@@ -45,7 +51,8 @@ describe(`GET /api/offers`, () => {
     const offer = response.body;
     assert.equal(offer.skip, SKIP);
     assert.equal(offer.limit, LIMIT);
-    assert.equal(offer.data.length, offer.total);
+    assert.equal(offer.total, 5);
+    assert.equal(offer.data.length, 2);
   });
 
   it(`get data from unknown resource`, async () => {

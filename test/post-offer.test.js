@@ -4,9 +4,14 @@ const request = require(`supertest`);
 const assert = require(`assert`);
 const express = require(`express`);
 
-const {keksobookingModelMock, KeksobookingModelMock} = require(`./mock/keksobooking-model-mock`);
+const offersStore = require(`./mock/offers-store-mock`);
+const imagesStoreMock = require(`./mock/images-store-mock`);
+const offersRoute = require(`../src/routes/route`)(offersStore, imagesStoreMock);
+
 const app = express();
-require(`../src/routes/routes`)(app, keksobookingModelMock, KeksobookingModelMock);
+
+app.use(`/api/offers`, offersRoute);
+
 const TEST_OFFER = {
   "name": `Pavel`,
   "title": `Маленькая квартирка рядом с парком`,

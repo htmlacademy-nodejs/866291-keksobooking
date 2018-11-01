@@ -11,7 +11,7 @@ const commands = [
   require(`./commands/license`),
   require(`./commands/description`),
   require(`./commands/generate`),
-  require(`./commands/server`),
+  require(`./server`),
   require(`./commands/default`),
 ];
 const DEFAULT_COMMAND = `default`;

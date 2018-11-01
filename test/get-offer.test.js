@@ -4,9 +4,13 @@ const request = require(`supertest`);
 const assert = require(`assert`);
 const express = require(`express`);
 
-const {keksobookingModelMock, KeksobookingModelMock} = require(`./mock/keksobooking-model-mock`);
+const offersStore = require(`./mock/offers-store-mock`);
+const imagesStoreMock = require(`./mock/images-store-mock`);
+const offersRoute = require(`../src/routes/route`)(offersStore, imagesStoreMock);
+
 const app = express();
-require(`../src/routes/routes`)(app, keksobookingModelMock, KeksobookingModelMock);
+
+app.use(`/api/offers`, offersRoute);
 
 const DATE = 1540873946269;
 const DATE_FAIL = 1;
@@ -60,7 +64,7 @@ describe(`GET /api/offers`, () => {
       get(`/api/none`).
       set(`Accept`, `application/json`).
       expect(404).
-      expect(`Page was not found`).
+      expect(/Error/).
       expect(`Content-Type`, /html/);
   });
 

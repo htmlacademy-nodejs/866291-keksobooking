@@ -5,7 +5,6 @@ const path = require(`path`);
 const {promisify} = require(`util`);
 const {rl} = require(`../data/readline`);
 const {generateEntity} = require(`../generator/generator-keksobooking`);
-const Keksobooking = require(`../models/keksobooking.model`);
 
 const GENERATE_COMMAND = `--generate`;
 const DEFAULT_PATH = path.resolve(`keksobooking.json`);
@@ -29,11 +28,6 @@ const writeFileReturn = (message = `Файл создан успешно! (${pat
   rl.close();
   for (let i = 0; i < quantityNew; i++) {
     data.push(generateEntity());
-  }
-  for (let item of data) {
-    let keksobookingData = new Keksobooking();
-    Object.assign(keksobookingData, item);
-    keksobookingData.save();
   }
   return writeFile(pathFileNew, JSON.stringify(data), fileWriteOptions)
     .then(() => console.log(message))

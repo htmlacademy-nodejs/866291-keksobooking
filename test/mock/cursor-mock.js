@@ -17,11 +17,8 @@ class Keksobooking {
     return this.data;
   }
 
-  count() {
+  async count() {
     return this.data.length;
-  }
-  slice(count, number) {
-    return this.data.slice(count, number);
   }
 }
 

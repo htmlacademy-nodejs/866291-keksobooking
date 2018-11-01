@@ -25,16 +25,21 @@ const validate = (data) => {
   } else if (data.title.length < VALID.MIN_TITLE) {
     errors.push(`"title" короче чем ${VALID.MIN_TITLE}`);
   }
+  if (!VALID.TYPE.find((item) => item === data.type)) {
+    errors.push(`"type" неверные данные`);
+  }
   if (data.price > VALID.MAX_PRICE) {
     errors.push(`"price" больше чем ${VALID.MAX_TITLE}`);
   } else if (data.title < VALID.MIN_PRICE) {
     errors.push(`"price" меньше чем ${VALID.MIN_TITLE}`);
   }
-  const address = data.address.split(`, `);
-  data.location = {
-    "x": parseInt(address[0], 10),
-    "y": parseInt(address[1], 10)
-  };
+  if (data.address) {
+    const address = data.address.split(`, `);
+    data.location = {
+      "x": parseInt(address[0], 10),
+      "y": parseInt(address[1], 10)
+    };
+  }
   if (data.address !== `${data.location.x}, ${data.location.y}`) {
     errors.push(`"address" неверные данные`);
   }
@@ -51,6 +56,11 @@ const validate = (data) => {
   }
   if (!data.checkout.match(/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/i)) {
     errors.push(`"checkout" неверные данные`);
+  }
+  for (let feature of data.features) {
+    if (!VALID.FEATURES.find((item) => item === feature)) {
+      errors.push(`"features" неверные данные`);
+    }
   }
   if (!data.name || data.name === ``) {
     data.name = takeArrayElement(VALID.NAME);

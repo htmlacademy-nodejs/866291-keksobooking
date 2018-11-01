@@ -1,5 +1,5 @@
 'use strict';
-
+console.log(`test`);
 const {MongoClient} = require(`mongodb`);
 
 const url = `mongodb://localhost:27017`;

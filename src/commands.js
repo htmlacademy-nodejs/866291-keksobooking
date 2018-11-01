@@ -39,8 +39,7 @@ module.exports = {
     const command = args[0];
     if (!command) {
       console.log(`Привет пользователь!\nЭта программа будет запускать сервер «${packageInfo.name.green}».\nАвтор: ${packageInfo.author.blue}.`);
-      commands.find((item) => isApplicable(item, `--server`)).execute(`--server`);
-      //  rl.question(`Cгенерировать данные? (yes/no) : `, enterAccept);
+      rl.question(`Cгенерировать данные? (yes/no) : `, enterAccept);
     } else {
       rl.pause();
       if (args.length > 1) {

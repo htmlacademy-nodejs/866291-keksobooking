@@ -7,6 +7,7 @@ const toStream = require(`buffer-to-stream`);
 
 // eslint-disable-next-line new-cap
 const offersRouter = express.Router();
+const logger = require(`../logger`);
 const IllegalArgumentError = require(`../error/illegal-argument-error`);
 const NotFoundError = require(`../error/not-found-error`);
 const ValidationError = require(`../error/validation-error`);
@@ -71,10 +72,10 @@ offersRouter.get(`/:date/avatar`, asyncMiddleware(async (req, res) => {
   res.header(`Content-Type`, `image/jpg`);
   res.header(`Content-Length`, result.info.length);
 
-  res.on(`error`, (e) => console.error(e));
+  res.on(`error`, (e) => logger.error(e));
   res.on(`end`, () => res.end());
   const stream = result.stream;
-  stream.on(`error`, (e) => console.error(e));
+  stream.on(`error`, (e) => logger.error(e));
   stream.on(`end`, () => res.end());
   stream.pipe(res);
 }));
@@ -97,7 +98,7 @@ const NOT_FOUND_HANDLER = (req, res) => {
 };
 
 const ERROR_HANDLER = (err, req, res, _next) => {
-  console.error(err);
+  logger.error(err);
   if (err instanceof ValidationError) {
     res.status(err.code).json(err.errors);
     return;

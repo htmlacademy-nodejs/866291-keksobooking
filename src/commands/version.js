@@ -1,6 +1,7 @@
 'use strict';
 
 require(`colors`);
+const logger = require(`../logger`);
 
 const packageInfo = require(`../../package`);
 
@@ -11,6 +12,6 @@ module.exports = {
   name: VERSION_COMMAND,
   description: `печатает версию приложения`,
   execute() {
-    console.log(`Версия: v${versionParts[0].red}.${versionParts[1].green}.${versionParts[2].blue}`);
+    logger.info(`Версия: v${versionParts[0].red}.${versionParts[1].green}.${versionParts[2].blue}`);
   }
 };

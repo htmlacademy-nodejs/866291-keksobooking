@@ -1,6 +1,7 @@
 'use strict';
 
 require(`colors`);
+const logger = require(`../logger`);
 
 const packageInfo = require(`../../package`);
 
@@ -10,6 +11,6 @@ module.exports = {
   name: LICENSE_COMMAND,
   description: `печатает лицензию приложения`,
   execute() {
-    console.log(`Лицензия: ${packageInfo.license.blue}`);
+    logger.info(`Лицензия: ${packageInfo.license.blue}`);
   }
 };

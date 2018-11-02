@@ -1,6 +1,7 @@
 'use strict';
 
 require(`colors`);
+const logger = require(`../logger`);
 const commands = [
   require(`./version`),
   require(`./author`),
@@ -21,6 +22,6 @@ module.exports = {
         message += `\n${item.name.italic.gray} — ${item.description.green}`;
       }
     });
-    console.log(message);
+    logger.info(message);
   }
 };

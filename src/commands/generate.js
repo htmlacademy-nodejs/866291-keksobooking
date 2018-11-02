@@ -5,6 +5,7 @@ const path = require(`path`);
 const {promisify} = require(`util`);
 const {rl} = require(`../data/readline`);
 const {generateEntity} = require(`../generator/generator-keksobooking`);
+const logger = require(`../logger`);
 
 const GENERATE_COMMAND = `--generate`;
 const DEFAULT_PATH = path.resolve(`keksobooking.json`);
@@ -30,19 +31,19 @@ const writeFileReturn = (message = `Файл создан успешно! (${pat
     data.push(generateEntity());
   }
   return writeFile(pathFileNew, JSON.stringify(data), fileWriteOptions)
-    .then(() => console.log(message))
-    .catch((error) => console.log(error));
+    .then(() => logger.info(message))
+    .catch((error) => logger.error(error));
 };
 
 
-const enterNumberConsole = (answer) => {
+const enterNumberlogger = (answer) => {
   if (answer >= 0) {
     quantityNew = answer;
     rl.question(`Введите путь к файлу : `, enterPathFile);
   } else if (answer.match(/^e(nd)?$/i)) {
     rl.close();
   } else {
-    rl.question(`Введите число правильно или закройте програму командой end : `, enterNumberConsole);
+    rl.question(`Введите число правильно или закройте програму командой end : `, enterNumberlogger);
   }
 };
 const enterPathFile = (answer) => {
@@ -66,7 +67,7 @@ const enterAcceptFile = (answer) => {
   } else if (answer.match(/^e(nd)?$/i) || answer.match(/^n(o)?$/i)) {
     rl.close();
   } else {
-    rl.question(`Введите число правильно или закройте програму командой end : `, enterNumberConsole);
+    rl.question(`Введите число правильно или закройте програму командой end : `, enterNumberlogger);
   }
 };
 
@@ -77,7 +78,7 @@ module.exports = {
     quantityNew = quantity;
     pathFileNew = pathFile;
     if (!isTest) {
-      return rl.question(`Сколько элементов нужно создать? (введите целое число): `, enterNumberConsole);
+      return rl.question(`Сколько элементов нужно создать? (введите целое число): `, enterNumberlogger);
     } else {
       return writeFileReturn();
     }

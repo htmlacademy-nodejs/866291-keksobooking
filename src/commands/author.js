@@ -1,6 +1,7 @@
 'use strict';
 
 require(`colors`);
+const logger = require(`../logger`);
 
 const packageInfo = require(`../../package`);
 
@@ -10,6 +11,6 @@ module.exports = {
   name: AUTHOR_COMMAND,
   description: `печатает автора приложения`,
   execute() {
-    console.log(`Автор: ${packageInfo.author.blue}`);
+    logger.info(`Автор: ${packageInfo.author.blue}`);
   }
 };

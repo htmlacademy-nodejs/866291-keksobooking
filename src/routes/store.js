@@ -1,7 +1,7 @@
 'use strict';
 
 const db = require(`../database/db`);
-
+const logger = require(`../logger`);
 const setupCollection = async () => {
   const dBase = await db;
 
@@ -63,4 +63,4 @@ class KeksobookingStore {
 }
 
 module.exports = new KeksobookingStore(setupCollection().
-  catch((e) => console.error(`Failed to set up "wizards"-collection`, e)));
+  catch((e) => logger.error(`Failed to set up "keksobookings"-collection`, e)));

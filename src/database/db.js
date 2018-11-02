@@ -9,7 +9,9 @@ const {
 
 const url = `mongodb://${DB_HOST}`;
 
-module.exports = MongoClient.connect(url, {useNewUrlParser: true}).then((client) => client.db(DB_PATH)).catch((e) => {
-  logger.error(`Failed to connect to MongoDB`, e);
-  process.exit(1);
-});
+module.exports = MongoClient.connect(url, {useNewUrlParser: true})
+  .then((client) => client.db(DB_PATH))
+  .catch((e) => {
+    logger.error(`Failed to connect to MongoDB`, e);
+    process.exit(1);
+  });

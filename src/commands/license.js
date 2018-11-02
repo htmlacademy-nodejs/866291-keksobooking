@@ -12,5 +12,6 @@ module.exports = {
   description: `печатает лицензию приложения`,
   execute() {
     logger.info(`Лицензия: ${packageInfo.license.blue}`);
+    process.exit(0);
   }
 };

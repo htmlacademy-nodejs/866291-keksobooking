@@ -12,5 +12,6 @@ module.exports = {
   description: `печатает описание приложения`,
   execute() {
     logger.info(`Описание: ${packageInfo.description.blue}`);
+    process.exit(0);
   }
 };

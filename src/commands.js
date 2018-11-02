@@ -1,9 +1,9 @@
 'use strict';
 
 require(`colors`);
+const path = require(`path`);
 const packageInfo = require(`../package`);
 const {rl} = require(`./data/readline`);
-const path = require(`path`);
 const commands = [
   require(`./commands/help`),
   require(`./commands/version`),
@@ -37,15 +37,12 @@ const enterAccept = (answer) => {
 module.exports = {
   check(args) {
     const command = args[0];
+    const commandParams = args.slice(0);
     if (!command) {
       rl.question(`Привет пользователь!\nЭта программа будет запускать сервер «${packageInfo.name.green}».\nАвтор: ${packageInfo.author.blue}.\nCгенерировать данные? (yes/no) : `, enterAccept);
     } else {
       rl.pause();
-      if (args.length > 1) {
-        commands.find((item) => isApplicable(item, command)).execute(command, args[1]);
-      } else {
-        commands.find((item) => isApplicable(item, command)).execute(command);
-      }
+      commands.find((item) => isApplicable(item, command)).execute(...commandParams);
     }
   }
 };

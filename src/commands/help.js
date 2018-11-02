@@ -23,5 +23,6 @@ module.exports = {
       }
     });
     logger.info(message);
+    process.exit(0);
   }
 };

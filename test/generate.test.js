@@ -3,13 +3,10 @@
 const assert = require(`assert`);
 const path = require(`path`);
 
-const generateCommand = require(`../src/commands/generate`);
+const generateCommand = require(`./generate/generate`);
 const {OFFER, LOCATION} = require(`../src/data/keksobooking`);
 
-
-const COMMAND = ``;
 const QUANTITY_OBJECT = 0;
-const IS_TEST = true;
 
 class KeksobokingData {
   constructor(obejct) {
@@ -43,7 +40,7 @@ describe(`Generate JSON command`, () => {
   it(`should fail on non existing folder`, () => {
     const tempFileName = path.resolve(`test`, `json`, `testfile.json`);
 
-    return generateCommand.execute(COMMAND, QUANTITY_OBJECT, tempFileName, IS_TEST)
+    return generateCommand.execute(QUANTITY_OBJECT, tempFileName)
       .then(() => assert.fail(`Path ${tempFileName} should not be available`))
       .catch((e) => assert.ok(e));
   });

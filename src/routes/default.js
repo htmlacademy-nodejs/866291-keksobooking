@@ -25,6 +25,7 @@ const getObjectOffers = async (cursor, skip = DEFAULT_SKIP, limit = DEFAUL_LIMIT
 };
 
 module.exports = (offersRouter) => {
+
   offersRouter.get(``, asyncMiddleware(async (req, res) => {
     const skip = parseInt(req.query.skip || DEFAULT_SKIP, 10);
     const limit = parseInt(req.query.limit || DEFAUL_LIMIT, 10);
@@ -37,16 +38,16 @@ module.exports = (offersRouter) => {
   offersRouter.post(``, jsonParser, upload.any(), asyncMiddleware(async (req, res) => {
     const body = req.body;
     const files = req.files;
-    console.log(files);
     let avatar;
     let photos = [];
-
     const validated = await validate(body);
-    for (let file of files) {
-      if (file.fieldname === `avatar`) {
-        avatar = file;
-      } else if (file.fieldname === `images`) {
-        photos.push(file);
+    if (files) {
+      for (let file of files) {
+        if (file.fieldname === `avatar`) {
+          avatar = file;
+        } else if (file.fieldname === `images`) {
+          photos.push(file);
+        }
       }
     }
     const result = await offersRouter.keksobookingsStore.saveOffer(validated, avatar, photos);
@@ -61,4 +62,5 @@ module.exports = (offersRouter) => {
     }
     res.send(validated);
   }));
+
 };

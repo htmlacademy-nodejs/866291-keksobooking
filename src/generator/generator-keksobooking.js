@@ -50,8 +50,8 @@ const generateEntity = (x = generateRandomNumber(LOCATION.MAX_X, LOCATION.MIN_X)
     photos: shuffleArray(OFFER.PHOTOS)
   },
   location: {
-    x: +x,
-    y: +y,
+    x: parseInt(x, 10),
+    y: parseInt(y, 10),
   },
   date: generateDate()
 });

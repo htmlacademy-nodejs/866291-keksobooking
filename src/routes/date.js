@@ -15,10 +15,10 @@ const findObject = async (offersRouter, date) => {
   }
   return found;
 };
+
 const returnPhoto = (res, result) => {
   res.header(`Content-Type`, `image/jpg`);
   res.header(`Content-Length`, result.info.length);
-
   res.on(`error`, (e) => logger.error(e));
   res.on(`end`, () => res.end());
   const stream = result.stream;
@@ -28,6 +28,7 @@ const returnPhoto = (res, result) => {
 };
 
 module.exports = (offersRouter) => {
+
   offersRouter.get(`/:date`, asyncMiddleware(async (req, res) => {
     const offerDate = req.params.date;
     if (!offerDate) {
@@ -38,7 +39,6 @@ module.exports = (offersRouter) => {
     if (!found) {
       throw new NotFoundError(`Обьект с датой "${offerDate}" не найден`);
     }
-
     res.send(found);
   }));
 
@@ -50,6 +50,7 @@ module.exports = (offersRouter) => {
     }
     returnPhoto(res, result);
   }));
+
   offersRouter.get(`/:date/photos/:number`, asyncMiddleware(async (req, res) => {
     const found = await findObject(offersRouter, req.params.date);
     const numberPhotes = parseInt(req.params.number, 10);
@@ -59,4 +60,5 @@ module.exports = (offersRouter) => {
     }
     returnPhoto(res, result);
   }));
+
 };

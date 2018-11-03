@@ -3,36 +3,46 @@
 const ValidationError = require(`../error/validation-error`);
 const {VALID} = require(`../data/keksobooking`);
 const {takeArrayElement} = require(`../data/randomValue`);
+
 const errorThrow = (errors) => {
   if (errors.length > 0) {
     throw new ValidationError(errors);
   }
 };
+const checkMaxMin = (errors, object, objectName, max, min, isLength = false) => {
+  const value = isLength ? object.length : object;
+  const messageMax = isLength ? `длинее` : `больше`;
+  const messageMin = isLength ? `короче` : `меньше`;
+  if (value > max) {
+    errors.push(`"${objectName}" ${messageMax} чем ${max}`);
+  } else if (value < min) {
+    errors.push(`"${objectName}" ${messageMin} чем ${min}`);
+  }
+
+};
 const validate = (data) => {
+
   const errors = [];
   if (Object.keys(data).length === 0 || data.length === 0) {
     errors.push(`Пустая строка!`);
     throw new ValidationError(errors);
   }
+
   for (let item of VALID.FIELDS) {
     if (!data[item]) {
       errors.push(`Нужно поле "${item}"!`);
     }
   }
+
   errorThrow(errors);
-  if (data.title.length > VALID.MAX_TITLE) {
-    errors.push(`"title" длинее чем ${VALID.MAX_TITLE}`);
-  } else if (data.title.length < VALID.MIN_TITLE) {
-    errors.push(`"title" короче чем ${VALID.MIN_TITLE}`);
-  }
+  checkMaxMin(errors, data.title, `title`, VALID.MAX_TITLE, VALID.MIN_TITLE, true);
+
   if (!VALID.TYPE.find((item) => item === data.type)) {
     errors.push(`"type" неверные данные`);
   }
-  if (data.price > VALID.MAX_PRICE) {
-    errors.push(`"price" больше чем ${VALID.MAX_TITLE}`);
-  } else if (data.title < VALID.MIN_PRICE) {
-    errors.push(`"price" меньше чем ${VALID.MIN_TITLE}`);
-  }
+
+  checkMaxMin(errors, data.price, `price`, VALID.MAX_PRICE, VALID.MIN_PRICE, false);
+
   if (data.address) {
     const address = data.address.split(`, `);
     data.location = {
@@ -40,23 +50,25 @@ const validate = (data) => {
       "y": parseInt(address[1], 10)
     };
   }
+
   if (data.address !== `${data.location.x}, ${data.location.y}`) {
     errors.push(`"address" неверные данные`);
   }
+
   if (data.address.length > VALID.MAX_ADDRESS) {
     errors.push(`"address" длинее чем ${VALID.MAX_ADDRESS}`);
   }
-  if (data.price.rooms > VALID.MAX_TITLE) {
-    errors.push(`"rooms" больше чем ${VALID.MAX_TITLE}`);
-  } else if (data.title.rooms < VALID.MIN_TITLE) {
-    errors.push(`"rooms" меньше чем ${VALID.MIN_TITLE}`);
-  }
+
+  checkMaxMin(errors, data.rooms, `rooms`, VALID.MAX_ROOMS, VALID.MIN_ROOMS, false);
+
   if (!data.checkin.match(/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/i)) {
     errors.push(`"checkin" неверные данные`);
   }
+
   if (!data.checkout.match(/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/i)) {
     errors.push(`"checkout" неверные данные`);
   }
+
   if (data.features) {
     if (!Array.isArray(data.features)) {
       data.features = [data.features];
@@ -67,13 +79,16 @@ const validate = (data) => {
       }
     }
   }
+
   if (!data.name || data.name === ``) {
     data.name = takeArrayElement(VALID.NAME);
   }
+
   data.price = parseInt(data.price, 10);
   data.rooms = parseInt(data.rooms, 10);
   data.guests = parseInt(data.guests, 10);
   errorThrow(errors);
+
   return data;
 };
 

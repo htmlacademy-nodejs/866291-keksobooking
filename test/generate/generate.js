@@ -13,7 +13,7 @@ const data = [];
 const fileWriteOptions = {encoding: `utf-8`, mode: 0o644};
 
 module.exports = {
-  execute(command, quantity = 1, pathFile = DEFAULT_PATH) {
+  execute(quantity = 1, pathFile = DEFAULT_PATH) {
     for (let i = 0; i < quantity; i++) {
       data.push(generateEntity());
     }

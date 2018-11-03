@@ -1,12 +1,16 @@
 'use strict';
 
 const assert = require(`assert`);
+const fs = require(`fs`);
+const {promisify} = require(`util`);
+const fsaccess = promisify(fs.access);
+const fsunlink = promisify(fs.unlink);
 const path = require(`path`);
 
 const generateCommand = require(`./generate/generate`);
 const {OFFER, LOCATION} = require(`../src/data/keksobooking`);
 
-const QUANTITY_OBJECT = 0;
+const QUANTITY_OBJECT = 5;
 
 class KeksobokingData {
   constructor(obejct) {
@@ -19,7 +23,7 @@ class KeksobokingData {
     it(`Check data [${index}]`, () => {
       assert.equal(typeof this.author.avatar, `string`, this.author.avatar);
       assert(OFFER.TITLE.indexOf(this.offer.title) !== -1, this.offer.title);
-      assert.equal(this.offer.addres, `${this.location.x}, ${this.location.y}`, this.offer.addres);
+      assert.equal(this.offer.address, `${this.location.x}, ${this.location.y}`, this.offer.address);
       assert(this.offer.price <= OFFER.MAX_PRICE && this.offer.price >= OFFER.MIN_PRICE, this.offer.price);
       assert(OFFER.TYPE.indexOf(this.offer.type) !== -1, this.offer.type);
       assert(this.offer.rooms <= OFFER.MAX_ROOMS && this.offer.rooms >= OFFER.MIN_ROOMS, this.offer.rooms);
@@ -37,12 +41,26 @@ class KeksobokingData {
 }
 
 describe(`Generate JSON command`, () => {
-  it(`should fail on non existing folder`, () => {
+  it(`Should create a new file in "tmp" catalogue of project root`, () => {
     const tempFileName = path.resolve(`test`, `json`, `testfile.json`);
+    return generateCommand.execute(0, tempFileName)
+      .then(fsaccess(tempFileName))
+      .then(fsunlink(tempFileName))
+      .catch((err) => assert.fail(err.message));
+  });
 
+  it(`should fail on non existing folder.`, () => {
+    const tempFileName = path.resolve(`test`, `json-test`, `testfile.json`);
+    return generateCommand.execute(0, tempFileName)
+      .then(() => assert.fail(`The "${tempFileName}" path must be inaccessible!`))
+      .catch((err) => assert.ok(err));
+  });
+
+  it(`Create test file.`, () => {
+    const tempFileName = path.resolve(`test`, `json`, `testfile.json`);
     return generateCommand.execute(QUANTITY_OBJECT, tempFileName)
-      .then(() => assert.fail(`Path ${tempFileName} should not be available`))
-      .catch((e) => assert.ok(e));
+      .then(() => assert.ok(`File create!`))
+      .catch((err) => assert.fail(err));
   });
   it(`Check JSON file`, () => {
     const tempFileName = path.resolve(`test`, `json`, `testfile.json`);

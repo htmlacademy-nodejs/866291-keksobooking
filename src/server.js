@@ -4,9 +4,9 @@ const express = require(`express`);
 const path = require(`path`);
 const app = express();
 
-const offersStore = require(`./routes/store`);
-const imagesStore = require(`./images/store`);
-const offersRouter = require(`./routes/route`)(offersStore, imagesStore);
+const keksobookingsStore = require(`./store/keksobooking-store`);
+const imagesStore = require(`./store/image-store`);
+const offersRouter = require(`./routes/index`)(keksobookingsStore, imagesStore);
 const logger = require(`./logger`);
 
 const SERVER_COMMAND = `--server`;

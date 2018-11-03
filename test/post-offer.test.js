@@ -4,9 +4,9 @@ const request = require(`supertest`);
 const assert = require(`assert`);
 const express = require(`express`);
 
-const offersStore = require(`./mock/offers-store-mock`);
+const keksobookingsStore = require(`./mock/offers-store-mock`);
 const imagesStoreMock = require(`./mock/images-store-mock`);
-const offersRoute = require(`../src/routes/route`)(offersStore, imagesStoreMock);
+const offersRoute = require(`../src/routes/route`)(keksobookingsStore, imagesStoreMock);
 
 const app = express();
 

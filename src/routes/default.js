@@ -38,7 +38,7 @@ module.exports = (offersRouter) => {
     const body = req.body;
     const avatar = req.file;
     const validated = await validate(body);
-    const result = await offersRouter.keksobookingsStore.save(validated, avatar);
+    const result = await offersRouter.keksobookingsStore.saveOffer(validated, avatar);
     const insertedId = result.insertedId;
 
     if (avatar) {

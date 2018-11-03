@@ -1,7 +1,6 @@
 'use strict';
 
 require(`colors`);
-const path = require(`path`);
 const packageInfo = require(`../package`);
 const {rl} = require(`./data/readline`);
 const commands = [
@@ -10,15 +9,12 @@ const commands = [
   require(`./commands/author`),
   require(`./commands/license`),
   require(`./commands/description`),
-  require(`./commands/generate`),
+  require(`./commands/fill`),
   require(`./server`),
   require(`./commands/default`),
 ];
 const DEFAULT_COMMAND = `default`;
-const GENERATE_COMMAND = `--generate`;
-const DEFAULT_PATH = path.resolve(`keksobooking.json`);
-let quantityNew = 1;
-let pathFileNew = DEFAULT_PATH;
+const FILL_COMMAND = `--fill`;
 
 let isApplicable = function (item, command) {
   return item.name === command || item.name === DEFAULT_COMMAND;
@@ -26,9 +22,10 @@ let isApplicable = function (item, command) {
 
 const enterAccept = (answer) => {
   if (answer.match(/^y(es)?$/i)) {
-    commands.find((item) => isApplicable(item, GENERATE_COMMAND)).execute(GENERATE_COMMAND, quantityNew, pathFileNew);
+    commands.find((item) => isApplicable(item, FILL_COMMAND)).execute(FILL_COMMAND);
   } else if (answer.match(/^e(nd)?$/i) || answer.match(/^n(o)?$/i)) {
     rl.close();
+    process.exit(0);
   } else {
     rl.question(`Cгенерировать данные? (yes/no) : `, enterAccept);
   }

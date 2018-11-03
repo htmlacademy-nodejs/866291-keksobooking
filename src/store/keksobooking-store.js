@@ -46,7 +46,7 @@ class KeksobookingStore {
     return (await this.collection).find();
   }
 
-  async save(objectData, avatar) {
+  async saveOffer(objectData, avatar) {
     let object = Object.assign({}, defaultKeksobooking);
     Object.assign(object.offer, objectData);
     Object.assign(object.location, objectData.location);
@@ -58,6 +58,10 @@ class KeksobookingStore {
       object.author.avatar = `api/offers/${object.date}/avatar`;
     }
     return (await this.collection).insertOne(object);
+  }
+
+  async saveAll(data) {
+    return (await this.collection).insertMany(data);
   }
 
 }

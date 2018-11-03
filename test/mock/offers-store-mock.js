@@ -24,7 +24,7 @@ class OffersMock {
     return new Cursor(this.data);
   }
 
-  async save() {
+  async saveOffer() {
     return {
       insertedId: 42
     };

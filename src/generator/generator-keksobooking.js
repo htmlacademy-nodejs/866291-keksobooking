@@ -1,6 +1,6 @@
 'use strict';
 
-const {AVATAR_URL, OFFER, LOCATION, DATE_INTERVAL} = require(`../data/keksobooking`);
+const {AVATAR_URL, OFFER, LOCATION, DATE_INTERVAL, VALID} = require(`../data/keksobooking`);
 const {generateRandomNumber, takeArrayElement, shuffleArray} = require(`../data/randomValue`);
 
 const addDays = (date, days) => {
@@ -33,6 +33,7 @@ const generateDate = () => {
 
 const generateEntity = (x = generateRandomNumber(LOCATION.MAX_X, LOCATION.MIN_X), y = generateRandomNumber(LOCATION.MAX_Y, LOCATION.MIN_Y)) => ({
   author: {
+    name: takeArrayElement(VALID.NAME),
     avatar: generateAvatar()
   },
   offer: {

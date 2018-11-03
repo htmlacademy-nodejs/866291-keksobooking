@@ -15,8 +15,9 @@ dateRoute(offersRouter);
 errorRoute(offersRouter);
 
 
-module.exports = (keksobookingsStore, imagesStore) => {
+module.exports = (keksobookingsStore, avatarsStore, photesStore) => {
   offersRouter.keksobookingsStore = keksobookingsStore;
-  offersRouter.imageStore = imagesStore;
+  offersRouter.avatarsStore = avatarsStore;
+  offersRouter.photesStore = photesStore;
   return offersRouter;
 };

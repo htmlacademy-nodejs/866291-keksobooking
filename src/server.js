@@ -5,8 +5,8 @@ const path = require(`path`);
 const app = express();
 
 const keksobookingsStore = require(`./store/keksobooking-store`);
-const imagesStore = require(`./store/image-store`);
-const offersRouter = require(`./routes/index`)(keksobookingsStore, imagesStore);
+const {avatarsStore, photesStore} = require(`./store/image-store`);
+const offersRouter = require(`./routes/index`)(keksobookingsStore, avatarsStore, photesStore);
 const logger = require(`./logger`);
 const {rl} = require(`./data/readline`);
 

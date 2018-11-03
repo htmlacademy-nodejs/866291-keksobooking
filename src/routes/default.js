@@ -34,16 +34,30 @@ module.exports = (offersRouter) => {
     res.send(await getObjectOffers(await offersRouter.keksobookingsStore.getAllObject(), skip, limit));
   }));
 
-  offersRouter.post(``, jsonParser, upload.single(`avatar`), asyncMiddleware(async (req, res) => {
+  offersRouter.post(``, jsonParser, upload.any(), asyncMiddleware(async (req, res) => {
     const body = req.body;
-    console.log(body);
-    const avatar = req.file;
-    const validated = await validate(body);
-    const result = await offersRouter.keksobookingsStore.saveOffer(validated, avatar);
-    const insertedId = result.insertedId;
+    const files = req.files;
+    console.log(files);
+    let avatar;
+    let photos = [];
 
+    const validated = await validate(body);
+    for (let file of files) {
+      if (file.fieldname === `avatar`) {
+        avatar = file;
+      } else if (file.fieldname === `images`) {
+        photos.push(file);
+      }
+    }
+    const result = await offersRouter.keksobookingsStore.saveOffer(validated, avatar, photos);
+    const insertedId = result.insertedId;
     if (avatar) {
-      await offersRouter.imageStore.save(insertedId, toStream(avatar.buffer));
+      await offersRouter.avatarsStore.save(insertedId, toStream(avatar.buffer));
+    }
+    let i = 0;
+    for (let photo of photos) {
+      await offersRouter.photesStore.save({id: insertedId, number: i}, toStream(photo.buffer));
+      i++;
     }
     res.send(validated);
   }));

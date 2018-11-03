@@ -6,7 +6,7 @@ const express = require(`express`);
 
 const keksobookingsStore = require(`./mock/offers-store-mock`);
 const imagesStoreMock = require(`./mock/images-store-mock`);
-const offersRoute = require(`../src/routes/index`)(keksobookingsStore, imagesStoreMock);
+const offersRoute = require(`../src/routes/index`)(keksobookingsStore, imagesStoreMock, imagesStoreMock);
 
 const app = express();
 

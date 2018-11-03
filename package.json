@@ -1,6 +1,6 @@
 {
   "name": "866291-keksobooking",
-  "version": "0.0.1",
+  "version": "0.9.1",
   "description": "* Студент: [Andrey Pahomov](https://up.htmlacademy.ru/nodejs/2/user/866291). * Наставник: [Сергей Вохмянин](https://up.htmlacademy.ru/nodejs/2/user/530823).",
   "main": "index.js",
   "dependencies": {

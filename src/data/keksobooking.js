@@ -51,7 +51,7 @@ module.exports = {
   LOCATION: {
     MAX_X: 900,
     MIN_X: 300,
-    MAX_Y: 900,
+    MAX_Y: 500,
     MIN_Y: 150
   },
   DATE_INTERVAL: -7,
@@ -98,5 +98,29 @@ module.exports = {
       `Julia`
     ]
 
+  },
+  DEFAULT_KEKSOBOOKING: {
+    "author": {
+      "name": ``,
+      "avatar": ``
+    },
+    "offer": {
+      "title": ``,
+      "address": ``,
+      "description": ``,
+      "price": 0,
+      "type": ``,
+      "rooms": 0,
+      "guests": 0,
+      "checkin": ``,
+      "checkout": ``,
+      "features": [],
+      "photos": []
+    },
+    "location": {
+      "x": 0,
+      "y": 0
+    },
+    "date": 0
   }
 };

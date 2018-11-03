@@ -57,14 +57,22 @@ const validate = (data) => {
   if (!data.checkout.match(/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/i)) {
     errors.push(`"checkout" неверные данные`);
   }
-  for (let feature of data.features) {
-    if (!VALID.FEATURES.find((item) => item === feature)) {
-      errors.push(`"features" неверные данные`);
+  if (data.features) {
+    if (!Array.isArray(data.features)) {
+      data.features = [data.features];
+    }
+    for (let feature of data.features) {
+      if (!VALID.FEATURES.find((item) => item === feature)) {
+        errors.push(`"features" неверные данные`);
+      }
     }
   }
   if (!data.name || data.name === ``) {
     data.name = takeArrayElement(VALID.NAME);
   }
+  data.price = parseInt(data.price, 10);
+  data.rooms = parseInt(data.rooms, 10);
+  data.guests = parseInt(data.guests, 10);
   errorThrow(errors);
   return data;
 };

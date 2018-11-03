@@ -2,6 +2,7 @@
 
 const db = require(`../database/db`);
 const logger = require(`../logger`);
+const {DEFAULT_KEKSOBOOKING} = require(`../data/keksobooking`);
 const setupCollection = async () => {
   const dBase = await db;
 
@@ -9,30 +10,6 @@ const setupCollection = async () => {
   //  collection.createIndex({name: -1}, {unique: true});
   return collection;
 };
-const defaultKeksobooking = {
-  "author": {
-    "name": ``,
-    "avatar": ``
-  },
-  "offer": {
-    "title": ``,
-    "address": ``,
-    "description": ``,
-    "price": 0,
-    "type": ``,
-    "rooms": 0,
-    "guests": 0,
-    "checkin": ``,
-    "checkout": ``,
-    "features": []
-  },
-  "location": {
-    "x": 0,
-    "y": 0
-  },
-  "date": 0
-};
-
 class KeksobookingStore {
   constructor(collection) {
     this.collection = collection;
@@ -47,7 +24,7 @@ class KeksobookingStore {
   }
 
   async saveOffer(objectData, avatar) {
-    let object = Object.assign({}, defaultKeksobooking);
+    let object = Object.assign({}, DEFAULT_KEKSOBOOKING);
     Object.assign(object.offer, objectData);
     Object.assign(object.location, objectData.location);
     Object.assign(object.author, {"name": objectData.name});

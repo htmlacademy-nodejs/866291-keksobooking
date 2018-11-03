@@ -38,7 +38,7 @@ const generateEntity = (x = generateRandomNumber(LOCATION.MAX_X, LOCATION.MIN_X)
   },
   offer: {
     title: takeArrayElement(OFFER.TITLE),
-    addres: `${x}, ${y}`,
+    address: `${x}, ${y}`,
     price: generateRandomNumber(OFFER.MAX_PRICE, OFFER.MIN_PRICE),
     type: takeArrayElement(OFFER.TYPE),
     rooms: generateRandomNumber(OFFER.MAX_ROOMS, OFFER.MIN_ROOMS),

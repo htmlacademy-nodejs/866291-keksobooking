@@ -36,6 +36,7 @@ module.exports = (offersRouter) => {
 
   offersRouter.post(``, jsonParser, upload.single(`avatar`), asyncMiddleware(async (req, res) => {
     const body = req.body;
+    console.log(body);
     const avatar = req.file;
     const validated = await validate(body);
     const result = await offersRouter.keksobookingsStore.saveOffer(validated, avatar);

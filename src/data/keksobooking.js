@@ -70,7 +70,7 @@ module.exports = {
     TYPE: [
       `flat`,
       `palace`,
-      `house `,
+      `house`,
       `bungalo`,
     ],
     MAX_PRICE: 100000,

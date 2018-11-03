@@ -4,8 +4,8 @@ const {rl} = require(`../data/readline`);
 const {generateEntity} = require(`../generator/generator-keksobooking`);
 const KeksobookingsStore = require(`../store/keksobooking-store`);
 const logger = require(`../logger`);
-
-const GENERATE_COMMAND = `--fill`;
+const {COMMAND} = require(`../data/commands`);
+const {REG_EXP} = require(`../data/reg-exp`);
 
 const writeDb = async (quantity) => {
   rl.close();
@@ -28,15 +28,16 @@ const writeDb = async (quantity) => {
 const enterNumberlogger = (answer) => {
   if (answer >= 0) {
     writeDb(parseInt(answer, 10));
-  } else if (answer.match(/^e(nd)?$/i)) {
+  } else if (answer.match(REG_EXP.END)) {
     rl.close();
+    process.exit(0);
   } else {
     rl.question(`Введите число правильно или закройте програму командой end : `, enterNumberlogger);
   }
 };
 
 module.exports = {
-  name: GENERATE_COMMAND,
+  name: COMMAND.FILL,
   description: `генерирует данные приложения`,
   execute(command, quantity) {
     if (!(quantity >= 0)) {

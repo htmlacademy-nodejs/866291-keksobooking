@@ -24,6 +24,7 @@ class KeksobookingStore {
   }
 
   async saveOffer(objectData, avatar, photos) {
+
     let object = Object.assign({}, DEFAULT_KEKSOBOOKING);
     Object.assign(object.offer, objectData);
     Object.assign(object.location, objectData.location);
@@ -31,12 +32,15 @@ class KeksobookingStore {
     delete object.offer.name;
     delete object.offer.location;
     object.date = Date.now();
+
     if (avatar) {
       object.author.avatar = `api/offers/${object.date}/avatar`;
     }
+
     for (let i = 0; i < photos.length; i++) {
       object.offer.photos[i] = `api/offers/${object.date}/photos/${i}`;
     }
+
     return (await this.collection).insertOne(object);
   }
 

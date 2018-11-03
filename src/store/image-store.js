@@ -2,6 +2,8 @@
 
 const db = require(`../database/db`);
 const mongodb = require(`mongodb`);
+const avatarsDB = `avatars`;
+const photesDB = `photes`;
 
 class ImageStore {
   constructor(bdName) {
@@ -46,6 +48,6 @@ class ImageStore {
 
 
 module.exports = {
-  avatarsStore: new ImageStore(`avatars`),
-  photesStore: new ImageStore(`photeStore`)
+  avatarsStore: new ImageStore(avatarsDB),
+  photesStore: new ImageStore(photesDB)
 };

@@ -1,7 +1,6 @@
 'use strict';
 
 require(`colors`);
-const logger = require(`../logger`);
 const commands = [
   require(`./version`),
   require(`./author`),
@@ -10,19 +9,19 @@ const commands = [
   require(`./fill`),
   require(`../server`)
 ];
-const HELP_COMMAND = `--help`;
+const {COMMAND} = require(`../data/commands`);
 
 module.exports = {
-  name: HELP_COMMAND,
+  name: COMMAND.HELP,
   description: `печатает этот текст`,
   execute() {
-    let message = `Доступные команды:\n${HELP_COMMAND.italic.gray} — ${`печатает этот текст`.green}`;
+    let message = `Доступные команды:\n${COMMAND.HELP.italic.gray} — ${`печатает этот текст`.green}`;
     commands.forEach(function (item) {
       if (item.name) {
         message += `\n${item.name.italic.gray} — ${item.description.green}`;
       }
     });
-    logger.info(message);
+    console.log(message);
     process.exit(0);
   }
 };

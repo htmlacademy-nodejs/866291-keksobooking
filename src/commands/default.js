@@ -1,16 +1,15 @@
 'use strict';
 
 require(`colors`);
-const logger = require(`../logger`);
 
 const HELP_COMMAND = `--help`;
-const DEFAULT_COMMAND = `default`;
+const {COMMAND} = require(`../data/commands`);
 
 module.exports = {
-  name: DEFAULT_COMMAND,
+  name: COMMAND.DEFAULT,
   description: ``,
   execute(command) {
-    logger.error(`${`Неизвестная команда`.red} ${command.italic.gray}${`. Чтобы прочитать правила использования приложения, наберите `.red}${HELP_COMMAND.italic.gray}`);
+    console.log(`${`Неизвестная команда`.red} ${command.italic.gray}${`. Чтобы прочитать правила использования приложения, наберите `.red}${HELP_COMMAND.italic.gray}`);
     process.exit(1);
   }
 };

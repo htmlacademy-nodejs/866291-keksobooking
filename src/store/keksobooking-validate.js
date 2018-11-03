@@ -3,12 +3,14 @@
 const ValidationError = require(`../error/validation-error`);
 const {VALID} = require(`../data/keksobooking`);
 const {takeArrayElement} = require(`../data/randomValue`);
+const {REG_EXP} = require(`../data/reg-exp`);
 
 const errorThrow = (errors) => {
   if (errors.length > 0) {
     throw new ValidationError(errors);
   }
 };
+
 const checkMaxMin = (errors, object, objectName, max, min, isLength = false) => {
   const value = isLength ? object.length : object;
   const messageMax = isLength ? `длинее` : `больше`;
@@ -18,8 +20,8 @@ const checkMaxMin = (errors, object, objectName, max, min, isLength = false) => 
   } else if (value < min) {
     errors.push(`"${objectName}" ${messageMin} чем ${min}`);
   }
-
 };
+
 const validate = (data) => {
 
   const errors = [];
@@ -35,13 +37,15 @@ const validate = (data) => {
   }
 
   errorThrow(errors);
+
   checkMaxMin(errors, data.title, `title`, VALID.MAX_TITLE, VALID.MIN_TITLE, true);
+  checkMaxMin(errors, data.price, `price`, VALID.MAX_PRICE, VALID.MIN_PRICE, false);
+  checkMaxMin(errors, data.rooms, `rooms`, VALID.MAX_ROOMS, VALID.MIN_ROOMS, false);
 
   if (!VALID.TYPE.find((item) => item === data.type)) {
     errors.push(`"type" неверные данные`);
   }
 
-  checkMaxMin(errors, data.price, `price`, VALID.MAX_PRICE, VALID.MIN_PRICE, false);
 
   if (data.address) {
     const address = data.address.split(`, `);
@@ -59,13 +63,12 @@ const validate = (data) => {
     errors.push(`"address" длинее чем ${VALID.MAX_ADDRESS}`);
   }
 
-  checkMaxMin(errors, data.rooms, `rooms`, VALID.MAX_ROOMS, VALID.MIN_ROOMS, false);
 
-  if (!data.checkin.match(/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/i)) {
+  if (!data.checkin.match(REG_EXP.TIME)) {
     errors.push(`"checkin" неверные данные`);
   }
 
-  if (!data.checkout.match(/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/i)) {
+  if (!data.checkout.match(REG_EXP.TIME)) {
     errors.push(`"checkout" неверные данные`);
   }
 

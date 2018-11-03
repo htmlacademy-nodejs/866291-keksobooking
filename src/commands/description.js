@@ -1,17 +1,15 @@
 'use strict';
 
 require(`colors`);
-const logger = require(`../logger`);
 
 const packageInfo = require(`../../package`);
-
-const DESCRIPTION_COMMAND = `--description`;
+const {COMMAND} = require(`../data/commands`);
 
 module.exports = {
-  name: DESCRIPTION_COMMAND,
+  name: COMMAND.DESCRIPTION,
   description: `печатает описание приложения`,
   execute() {
-    logger.info(`Описание: ${packageInfo.description.blue}`);
+    console.log(`Описание: ${packageInfo.description.blue}`);
     process.exit(0);
   }
 };

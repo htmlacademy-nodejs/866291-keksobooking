@@ -1,17 +1,15 @@
 'use strict';
 
 require(`colors`);
-const logger = require(`../logger`);
 
 const packageInfo = require(`../../package`);
-
-const AUTHOR_COMMAND = `--author`;
+const {COMMAND} = require(`../data/commands`);
 
 module.exports = {
-  name: AUTHOR_COMMAND,
+  name: COMMAND.AUTHOR,
   description: `печатает автора приложения`,
   execute() {
-    logger.info(`Автор: ${packageInfo.author.blue}`);
+    console.log(`Автор: ${packageInfo.author.blue}`);
     process.exit(0);
   }
 };

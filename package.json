@@ -19,6 +19,7 @@
     "supertest": "3.3.0"
   },
   "scripts": {
+    "start": "node . --server",
     "test:lint": "eslint .",
     "test:mocha": "mocha",
     "test": "npm run test:lint && npm run test:mocha"

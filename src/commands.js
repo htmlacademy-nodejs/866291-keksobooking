@@ -13,17 +13,17 @@ const commands = [
   require(`./server`),
   require(`./commands/default`),
 ];
-const DEFAULT_COMMAND = `default`;
-const FILL_COMMAND = `--fill`;
+const {COMMAND} = require(`./data/commands`);
+const {REG_EXP} = require(`./data/reg-exp`);
 
 let isApplicable = function (item, command) {
-  return item.name === command || item.name === DEFAULT_COMMAND;
+  return item.name === command || item.name === COMMAND.DEFAULT;
 };
 
 const enterAccept = (answer) => {
-  if (answer.match(/^y(es)?$/i)) {
-    commands.find((item) => isApplicable(item, FILL_COMMAND)).execute(FILL_COMMAND);
-  } else if (answer.match(/^e(nd)?$/i) || answer.match(/^n(o)?$/i)) {
+  if (answer.match(REG_EXP.YES)) {
+    commands.find((item) => isApplicable(item, COMMAND.FILL)).execute(COMMAND.FILL);
+  } else if (answer.match(REG_EXP.END) || answer.match(REG_EXP.NO)) {
     rl.close();
     process.exit(0);
   } else {

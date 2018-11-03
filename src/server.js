@@ -8,11 +8,11 @@ const keksobookingsStore = require(`./store/keksobooking-store`);
 const {avatarsStore, photesStore} = require(`./store/image-store`);
 const offersRouter = require(`./routes/index`)(keksobookingsStore, avatarsStore, photesStore);
 const logger = require(`./logger`);
-const {rl} = require(`./data/readline`);
+const {COMMAND} = require(`./data/commands`);
 
-const SERVER_COMMAND = `--server`;
 const MAX_PORT = 49151;
 const MIN_PORT = 1024;
+
 const {
   SERVER_PORT = 3000,
   SERVER_HOST = `localhost`
@@ -38,19 +38,11 @@ const runServer = ({host, port}) => {
 
   app.listen(port, host, () => {
     logger.info(`Сервер запущен: http://${host}:${port}`);
-    rl.question(`Остановить сервер? (end): `, stopServer);
   });
 };
 
-const stopServer = (answer) => {
-  if (answer.match(/^e(nd)?$/i)) {
-    process.exit(0);
-  } else {
-    rl.question(`Остановить сервер? (end) : `, stopServer);
-  }
-};
 module.exports = {
-  name: SERVER_COMMAND,
+  name: COMMAND.SERVER,
   description: `запускает сервер`,
   execute(command, port = SERVER_PORT) {
     port = checkPort(port);

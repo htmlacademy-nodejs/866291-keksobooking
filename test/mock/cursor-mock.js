@@ -1,16 +1,16 @@
 'use strict';
 
-class Keksobooking {
+class Cursor {
   constructor(data) {
     this.data = data;
   }
 
   skip(count = 0) {
-    return new Keksobooking(this.data.slice(count));
+    return new Cursor(this.data.slice(count));
   }
 
   limit(count = 0) {
-    return new Keksobooking(this.data.slice(0, count));
+    return new Cursor(this.data.slice(0, count));
   }
 
   async toArray() {
@@ -22,4 +22,4 @@ class Keksobooking {
   }
 }
 
-module.exports = Keksobooking;
+module.exports = Cursor;

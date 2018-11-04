@@ -10,6 +10,5 @@ module.exports = {
   description: `печатает автора приложения`,
   execute() {
     console.log(`Автор: ${packageInfo.author.blue}`);
-    process.exit(0);
   }
 };

@@ -1,10 +1,9 @@
 'use strict';
 
-const db = require(`../database/db`);
+const dbConnections = require(`../database/singelton`);
 const mongodb = require(`mongodb`);
 const avatarsDB = `avatars`;
 const photesDB = `photes`;
-
 class ImageStore {
   constructor(bdName) {
     this.bdName = bdName;
@@ -14,7 +13,7 @@ class ImageStore {
     if (this._bucket) {
       return this._bucket;
     }
-    const dBase = await db;
+    const dBase = await dbConnections.get();
     if (!this._bucket) {
       this._bucket = new mongodb.GridFSBucket(dBase, {
         chunkSizeBytes: 512 * 1024,

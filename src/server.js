@@ -8,7 +8,7 @@ const keksobookingsStore = require(`./store/keksobooking-store`);
 const {avatarsStore, photesStore} = require(`./store/image-store`);
 const offersRouter = require(`./routes/index`)(keksobookingsStore, avatarsStore, photesStore);
 const logger = require(`./logger`);
-const {COMMAND} = require(`./data/commands`);
+const {COMMAND} = require(`./data/constants`);
 
 const MAX_PORT = 49151;
 const MIN_PORT = 1024;

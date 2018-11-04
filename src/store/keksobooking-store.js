@@ -2,7 +2,7 @@
 
 const dbConnections = require(`../database/singelton`);
 const logger = require(`../logger`);
-const {DEFAULT_KEKSOBOOKING} = require(`../data/keksobooking`);
+const {DEFAULT_KEKSOBOOKING} = require(`../data/constants`);
 const setupCollection = async () => {
   try {
     let db = await dbConnections.get();

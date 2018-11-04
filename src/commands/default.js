@@ -3,7 +3,7 @@
 require(`colors`);
 
 const HELP_COMMAND = `--help`;
-const {COMMAND} = require(`../data/commands`);
+const {COMMAND} = require(`../data/constants`);
 
 module.exports = {
   name: COMMAND.DEFAULT,

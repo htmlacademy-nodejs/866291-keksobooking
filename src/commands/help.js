@@ -9,7 +9,7 @@ const commands = [
   require(`./fill`),
   require(`../server`)
 ];
-const {COMMAND} = require(`../data/commands`);
+const {COMMAND} = require(`../data/constants`);
 
 module.exports = {
   name: COMMAND.HELP,
@@ -22,6 +22,5 @@ module.exports = {
       }
     });
     console.log(message);
-    process.exit(0);
   }
 };

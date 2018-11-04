@@ -1,19 +1,18 @@
 'use strict';
 
-const dbConnections = require(`../database/singelton`);
+const db = require(`../database/db`);
 const logger = require(`../logger`);
 const {DEFAULT_KEKSOBOOKING, DB_NAME} = require(`../data/constants`);
 const setupCollection = async () => {
-  let db = await dbConnections.get();
-  let collection = await db.collection(DB_NAME.OFFER);
+  let dBase = await db;
+  let collection = await dBase.collection(DB_NAME.OFFER);
   collection.createIndex({date: -1}, {unique: true});
 
   return collection;
 };
 class KeksobookingStore {
   constructor(collection) {
-    this.collection = collection ? collection : setupCollection().
-      catch((e) => logger.error(`Failed to set up "${DB_NAME.OFFER}"-collection`, e));
+    this.collection = collection;
   }
 
   async getObject(date) {
@@ -51,4 +50,5 @@ class KeksobookingStore {
 
 }
 
-module.exports = new KeksobookingStore();
+module.exports = new KeksobookingStore(setupCollection().
+catch((e) => logger.error(`Failed to set up "${DB_NAME.OFFER}"-collection`, e)));

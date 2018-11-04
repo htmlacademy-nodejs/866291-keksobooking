@@ -10,9 +10,13 @@ const LOCATION = {
 };
 
 const DATE_INTERVAL = -7;
+const MAX_PORT = 49151;
+const MIN_PORT = 1024;
 
 module.exports = {
   AVATAR_URL,
   LOCATION,
-  DATE_INTERVAL
+  DATE_INTERVAL,
+  MAX_PORT,
+  MIN_PORT
 };

@@ -3,16 +3,10 @@
 require(`colors`);
 const packageInfo = require(`../package`);
 const {rl} = require(`./data/readline`);
-const commands = [
-  require(`./commands/help`),
-  require(`./commands/version`),
-  require(`./commands/author`),
-  require(`./commands/license`),
-  require(`./commands/description`),
-  require(`./commands/fill`),
-  require(`./server`),
-  require(`./commands/default`),
-];
+const commands = [...require(`./commands/list`)];
+commands.push(require(`./commands/help`));
+commands.push(require(`./commands/default`));
+
 const {COMMAND, REG_EXP} = require(`./data/constants`);
 
 let isApplicable = function (item, command) {

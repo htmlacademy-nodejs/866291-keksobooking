@@ -1,7 +1,7 @@
 'use strict';
 
 const {COMMAND} = require(`./constants/command`);
-const {AVATAR_URL, LOCATION, DATE_INTERVAL} = require(`./constants/others`);
+const {AVATAR_URL, LOCATION, DATE_INTERVAL, MAX_PORT, MIN_PORT} = require(`./constants/others`);
 const {OFFER} = require(`./constants/offer`);
 const {VALID} = require(`./constants/valid`);
 const {DEFAULT_KEKSOBOOKING} = require(`./constants/default-keksobooking`);
@@ -15,5 +15,7 @@ module.exports = {
   DATE_INTERVAL,
   VALID,
   DEFAULT_KEKSOBOOKING,
-  REG_EXP
+  REG_EXP,
+  MAX_PORT,
+  MIN_PORT
 };

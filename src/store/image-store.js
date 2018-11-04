@@ -1,9 +1,8 @@
 'use strict';
 
 const dbConnections = require(`../database/singelton`);
+const {DB_NAME} = require(`../data/constants`);
 const mongodb = require(`mongodb`);
-const avatarsDB = `avatars`;
-const photesDB = `photes`;
 class ImageStore {
   constructor(bdName) {
     this.bdName = bdName;
@@ -47,6 +46,6 @@ class ImageStore {
 
 
 module.exports = {
-  avatarsStore: new ImageStore(avatarsDB),
-  photesStore: new ImageStore(photesDB)
+  avatarsStore: new ImageStore(DB_NAME.AVATAR),
+  photesStore: new ImageStore(DB_NAME.PHOTE)
 };

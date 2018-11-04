@@ -18,7 +18,6 @@ const enterAccept = (answer) => {
     commands.find((item) => isApplicable(item, COMMAND.FILL)).execute(COMMAND.FILL);
   } else if (answer.match(REG_EXP.END) || answer.match(REG_EXP.NO)) {
     rl.close();
-    process.exit(0);
   } else {
     rl.question(`Cгенерировать данные? (yes/no) : `, enterAccept);
   }

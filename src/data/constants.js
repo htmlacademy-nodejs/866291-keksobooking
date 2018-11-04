@@ -6,6 +6,7 @@ const {OFFER} = require(`./constants/offer`);
 const {VALID} = require(`./constants/valid`);
 const {DEFAULT_KEKSOBOOKING} = require(`./constants/default-keksobooking`);
 const {REG_EXP} = require(`./constants/reg-exp`);
+const {DB_NAME} = require(`./constants/db-name`);
 
 module.exports = {
   COMMAND,
@@ -17,5 +18,6 @@ module.exports = {
   DEFAULT_KEKSOBOOKING,
   REG_EXP,
   MAX_PORT,
-  MIN_PORT
+  MIN_PORT,
+  DB_NAME
 };

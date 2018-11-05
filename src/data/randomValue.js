@@ -9,7 +9,7 @@ const takeArrayElement = (array = []) => {
 };
 
 const shuffleArray = (array) => {
-  let newArray = array.slice()
+  const newArray = array.slice()
     .sort(() => {
       return generateRandomNumber(1, 0);
     });

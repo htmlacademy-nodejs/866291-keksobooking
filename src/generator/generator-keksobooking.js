@@ -12,12 +12,12 @@ const addDays = (date, days) => {
 };
 
 const generateAvatar = () => {
-  let randomString = Math.random().toString(36).substring(7);
+  const randomString = Math.random().toString(36).substring(7);
   return `${AVATAR_URL}${randomString}`;
 };
 const generateFeatures = () => {
-  let features = shuffleArray(OFFER.FEATURES);
-  let newFeatures = [];
+  const features = shuffleArray(OFFER.FEATURES);
+  const newFeatures = [];
   for (const item of features) {
     if (generateRandomNumber(1, 0)) {
       newFeatures.push(item);
@@ -26,8 +26,8 @@ const generateFeatures = () => {
   return newFeatures;
 };
 const generateDate = () => {
-  let max = Date.now();
-  let min = addDays(max, DATE_INTERVAL);
+  const max = Date.now();
+  const min = addDays(max, DATE_INTERVAL);
   return generateRandomNumber(max, min);
 };
 

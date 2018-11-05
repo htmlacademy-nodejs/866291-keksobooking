@@ -13,9 +13,9 @@ class KeksobookingStore {
       return this._collection;
     }
     if (!this._collection) {
-      let dBase = await db.get()
+      const dBase = await db.get()
         .then((dataBase) => {
-          logger.info(`Collection "${this.bdName}" connected`);
+          console.info(`Collection "${this.bdName}" connected`);
           return dataBase;
         })
         .catch((e) => logger.error(`Failed to connect "${this.bdName}"`, e));
@@ -37,7 +37,7 @@ class KeksobookingStore {
 
   async saveOffer(objectData, avatar, photos) {
 
-    let object = Object.assign({}, DEFAULT_KEKSOBOOKING);
+    const object = Object.assign({}, DEFAULT_KEKSOBOOKING);
     Object.assign(object.offer, objectData);
     Object.assign(object.location, objectData.location);
     Object.assign(object.author, {"name": objectData.name});

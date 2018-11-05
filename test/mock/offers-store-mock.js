@@ -3,8 +3,9 @@
 const Cursor = require(`./cursor-mock`);
 const generator = require(`../../src/generator/generator-keksobooking`);
 const DATE = 1540873946269;
-let array = [];
-for (let i = 0; i < 5; i++) {
+const QUANTITY = 5;
+const array = [];
+for (let i = 0; i < QUANTITY; i++) {
   array.push(generator.generateEntity());
 }
 array[0].date = DATE;

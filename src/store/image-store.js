@@ -16,7 +16,7 @@ class ImageStore {
     if (!this._bucket) {
       const dBase = await db.get()
         .then((dataBase) => {
-          logger.info(`Collection "${this.bdName}" connected`);
+          console.info(`Collection "${this.bdName}" connected`);
           return dataBase;
         })
         .catch((e) => logger.error(`Failed to connect "${this.bdName}"`, e));

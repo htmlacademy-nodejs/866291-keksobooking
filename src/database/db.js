@@ -25,7 +25,7 @@ class DataBase {
         .then((client) => {
           this._connect = client;
           this._db = client.db(DB_NAME);
-          logger.info(`MongoDB connected`);
+          console.info(`MongoDB connected`);
         })
         .catch((e) => {
           logger.error(`Failed to connect to MongoDB`, e);
@@ -38,7 +38,7 @@ class DataBase {
     if (this._connect) {
       this._connect.close()
         .then(() => {
-          logger.info(`MongoDB close connect`);
+          console.info(`MongoDB close connect`);
         })
         .catch((e) => {
           logger.error(`Failed to close connect to MongoDB`, e);

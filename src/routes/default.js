@@ -39,10 +39,10 @@ module.exports = (offersRouter) => {
     const body = req.body;
     const files = req.files;
     let avatar;
-    let photos = [];
+    const photos = [];
     const validated = await validate(body);
     if (files) {
-      for (let file of files) {
+      for (const file of files) {
         if (file.fieldname === `avatar`) {
           avatar = file;
         } else if (file.fieldname === `images`) {

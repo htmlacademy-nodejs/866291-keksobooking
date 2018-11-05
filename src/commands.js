@@ -9,7 +9,7 @@ commands.push(require(`./commands/default`));
 
 const {COMMAND, REG_EXP} = require(`./data/constants`);
 
-let isApplicable = function (item, command) {
+const isApplicable = (item, command) => {
   return item.name === command || item.name === COMMAND.DEFAULT;
 };
 

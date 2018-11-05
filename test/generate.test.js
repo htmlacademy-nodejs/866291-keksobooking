@@ -65,11 +65,11 @@ describe(`Generate JSON command`, () => {
   it(`Check JSON file`, () => {
     const tempFileName = path.resolve(`test`, `json`, `testfile.json`);
 
-    let testJSON = require(tempFileName);
+    const testJSON = require(tempFileName);
     let index = 0;
     describe(`Check KeksobokingData`, () => {
-      for (let item of testJSON) {
-        let testObject = new KeksobokingData(item);
+      for (const item of testJSON) {
+        const testObject = new KeksobokingData(item);
         testObject.checkValue(index);
         index++;
       }

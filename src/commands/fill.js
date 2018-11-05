@@ -9,7 +9,7 @@ const {COMMAND, REG_EXP} = require(`../data/constants`);
 
 const writeDb = async (quantity) => {
   rl.close();
-  let data = [];
+  const data = [];
   for (let i = 0; i < quantity; i++) {
     data.push(generateEntity());
   }

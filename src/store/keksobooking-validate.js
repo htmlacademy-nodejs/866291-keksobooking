@@ -29,7 +29,7 @@ const validate = (data) => {
     throw new ValidationError(errors);
   }
 
-  for (let item of VALID.FIELDS) {
+  for (const item of VALID.FIELDS) {
     if (!data[item]) {
       errors.push(`Нужно поле "${item}"!`);
     }
@@ -75,7 +75,7 @@ const validate = (data) => {
     if (!Array.isArray(data.features)) {
       data.features = [data.features];
     }
-    for (let feature of data.features) {
+    for (const feature of data.features) {
       if (!VALID.FEATURES.find((item) => item === feature)) {
         errors.push(`"features" неверные данные`);
       }

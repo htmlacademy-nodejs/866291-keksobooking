@@ -1,11 +1,11 @@
 'use strict';
 
-const {rl} = require(`../data/readline`);
+const rl = require(`../data/readline`);
 const {generateEntity} = require(`../generator/generator-keksobooking`);
 const KeksobookingsStore = require(`../store/keksobooking-store`);
 const logger = require(`../logger`);
-const {COMMAND} = require(`../data/commands`);
-const {REG_EXP} = require(`../data/reg-exp`);
+const db = require(`../database/db`);
+const {COMMAND, REG_EXP} = require(`../data/constants`);
 
 const writeDb = async (quantity) => {
   rl.close();
@@ -16,7 +16,7 @@ const writeDb = async (quantity) => {
   await KeksobookingsStore.saveAll(data)
     .then(() => {
       logger.info(`Созданно ${quantity} объектов в базе данных`);
-      process.exit(0);
+      db.stop();
     })
     .catch((e) => {
       logger.error(`Ошибка создания объектов: ${e}`);
@@ -30,7 +30,6 @@ const enterNumberlogger = (answer) => {
     writeDb(parseInt(answer, 10));
   } else if (answer.match(REG_EXP.END)) {
     rl.close();
-    process.exit(0);
   } else {
     rl.question(`Введите число правильно или закройте програму командой end : `, enterNumberlogger);
   }

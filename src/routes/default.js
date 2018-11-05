@@ -52,14 +52,15 @@ module.exports = (offersRouter) => {
     }
     const result = await offersRouter.keksobookingsStore.saveOffer(validated, avatar, photos);
     const insertedId = result.insertedId;
+
     if (avatar) {
       await offersRouter.avatarsStore.save(insertedId, toStream(avatar.buffer));
     }
-    let i = 0;
-    for (let photo of photos) {
-      await offersRouter.photesStore.save({id: insertedId, number: i}, toStream(photo.buffer));
-      i++;
+
+    for (let i = 0; i < photos.length; i++) {
+      await offersRouter.photesStore.save({id: insertedId, number: i}, toStream(photos[i].buffer));
     }
+
     res.send(validated);
   }));
 

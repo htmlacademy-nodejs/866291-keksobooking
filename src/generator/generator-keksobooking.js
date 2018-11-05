@@ -1,6 +1,6 @@
 'use strict';
 
-const {AVATAR_URL, OFFER, LOCATION, DATE_INTERVAL, VALID} = require(`../data/keksobooking`);
+const {AVATAR_URL, OFFER, LOCATION, DATE_INTERVAL, VALID} = require(`../data/constants`);
 const {generateRandomNumber, takeArrayElement, shuffleArray} = require(`../data/randomValue`);
 
 const addDays = (date, days) => {

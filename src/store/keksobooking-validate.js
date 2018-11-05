@@ -1,9 +1,8 @@
 'use strict';
 
 const ValidationError = require(`../error/validation-error`);
-const {VALID} = require(`../data/keksobooking`);
+const {VALID, REG_EXP} = require(`../data/constants`);
 const {takeArrayElement} = require(`../data/randomValue`);
-const {REG_EXP} = require(`../data/reg-exp`);
 
 const errorThrow = (errors) => {
   if (errors.length > 0) {

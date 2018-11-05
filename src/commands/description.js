@@ -3,13 +3,12 @@
 require(`colors`);
 
 const packageInfo = require(`../../package`);
-const {COMMAND} = require(`../data/commands`);
+const {COMMAND} = require(`../data/constants`);
 
 module.exports = {
   name: COMMAND.DESCRIPTION,
   description: `печатает описание приложения`,
   execute() {
     console.log(`Описание: ${packageInfo.description.blue}`);
-    process.exit(0);
   }
 };

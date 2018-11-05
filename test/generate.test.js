@@ -8,7 +8,7 @@ const fsunlink = promisify(fs.unlink);
 const path = require(`path`);
 
 const generateCommand = require(`./generate/generate`);
-const {OFFER, LOCATION} = require(`../src/data/keksobooking`);
+const {OFFER, LOCATION} = require(`../src/data/constants`);
 
 const QUANTITY_OBJECT = 5;
 

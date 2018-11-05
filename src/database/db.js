@@ -3,15 +3,49 @@ const {MongoClient} = require(`mongodb`);
 const logger = require(`../logger`);
 
 const {
-  DB_HOST = `localhost:27017`,
-  DB_PATH = `code-and-magick`
+  DB_HOST = `localhost`,
+  DB_PORT = 27017,
+  DB_NAME = `code-and-magick`
 } = process.env;
 
-const url = `mongodb://${DB_HOST}`;
+const url = `mongodb://${DB_HOST}:${DB_PORT}`;
 
-module.exports = MongoClient.connect(url, {useNewUrlParser: true})
-  .then((client) => client.db(DB_PATH))
-  .catch((e) => {
-    logger.error(`Failed to connect to MongoDB`, e);
-    process.exit(1);
-  });
+class DataBase {
+  constructor(urlText, dbName) {
+    this.url = urlText;
+    this.url = dbName;
+  }
+
+  async get() {
+    if (this._db) {
+      return this._db;
+    }
+    if (!this._db) {
+      await MongoClient.connect(url, {useNewUrlParser: true})
+        .then((client) => {
+          this._connect = client;
+          this._db = client.db(DB_NAME);
+          logger.info(`MongoDB connected`);
+        })
+        .catch((e) => {
+          logger.error(`Failed to connect to MongoDB`, e);
+          process.exit(1);
+        });
+    }
+    return this._db;
+  }
+  async stop() {
+    if (this._connect) {
+      this._connect.close()
+        .then(() => {
+          logger.info(`MongoDB close connect`);
+        })
+        .catch((e) => {
+          logger.error(`Failed to close connect to MongoDB`, e);
+          process.exit(1);
+        });
+    }
+  }
+}
+
+module.exports = new DataBase(url, DB_NAME);

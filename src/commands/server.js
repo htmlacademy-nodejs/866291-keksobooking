@@ -4,14 +4,11 @@ const express = require(`express`);
 const path = require(`path`);
 const app = express();
 
-const keksobookingsStore = require(`./store/keksobooking-store`);
-const {avatarsStore, photesStore} = require(`./store/image-store`);
-const offersRouter = require(`./routes/index`)(keksobookingsStore, avatarsStore, photesStore);
-const logger = require(`./logger`);
-const {COMMAND} = require(`./data/commands`);
-
-const MAX_PORT = 49151;
-const MIN_PORT = 1024;
+const keksobookingsStore = require(`../store/keksobooking-store`);
+const {avatarsStore, photesStore} = require(`../store/image-store`);
+const offersRouter = require(`../routes/index`)(keksobookingsStore, avatarsStore, photesStore);
+const logger = require(`../logger`);
+const {COMMAND, MAX_PORT, MIN_PORT} = require(`../data/constants`);
 
 const {
   SERVER_PORT = 3000,

@@ -1,26 +1,38 @@
 'use strict';
 
 const db = require(`../database/db`);
+const {DEFAULT_KEKSOBOOKING, DB_NAME} = require(`../data/constants`);
 const logger = require(`../logger`);
-const {DEFAULT_KEKSOBOOKING} = require(`../data/keksobooking`);
-const setupCollection = async () => {
-  const dBase = await db;
-
-  const collection = dBase.collection(`keksobookings`);
-  //  collection.createIndex({name: -1}, {unique: true});
-  return collection;
-};
 class KeksobookingStore {
-  constructor(collection) {
-    this.collection = collection;
+  constructor(bdName) {
+    this.bdName = bdName;
+  }
+
+  async getСollection() {
+    if (this._collection) {
+      return this._collection;
+    }
+    if (!this._collection) {
+      let dBase = await db.get()
+        .then((dataBase) => {
+          logger.info(`Collection "${this.bdName}" connected`);
+          return dataBase;
+        })
+        .catch((e) => logger.error(`Failed to connect "${this.bdName}"`, e));
+      this._collection = await dBase.collection(this.bdName);
+      this._collection.createIndex({date: -1}, {unique: true});
+    }
+    return this._collection;
   }
 
   async getObject(date) {
-    return (await this.collection).findOne({"date": parseInt(date, 10)});
+    const collection = await this.getСollection();
+    return collection.findOne({"date": parseInt(date, 10)});
   }
 
   async getAllObject() {
-    return (await this.collection).find();
+    const collection = await this.getСollection();
+    return collection.find();
   }
 
   async saveOffer(objectData, avatar, photos) {
@@ -41,14 +53,15 @@ class KeksobookingStore {
       object.offer.photos[i] = `api/offers/${object.date}/photos/${i}`;
     }
 
-    return (await this.collection).insertOne(object);
+    const collection = await this.getСollection();
+    return collection.insertOne(object);
   }
 
   async saveAll(data) {
-    return (await this.collection).insertMany(data);
+    const collection = await this.getСollection();
+    return collection.insertMany(data);
   }
 
 }
 
-module.exports = new KeksobookingStore(setupCollection().
-  catch((e) => logger.error(`Failed to set up "keksobookings"-collection`, e)));
+module.exports = new KeksobookingStore(DB_NAME.OFFER);

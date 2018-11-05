@@ -1,26 +1,33 @@
 'use strict';
 
-const db = require(`../database/db`);
-const logger = require(`../logger`);
+const initDb = require(`../database/db`);
 const {DEFAULT_KEKSOBOOKING, DB_NAME} = require(`../data/constants`);
-const setupCollection = async () => {
-  let dBase = await db;
-  let collection = await dBase.collection(DB_NAME.OFFER);
-  collection.createIndex({date: -1}, {unique: true});
-
-  return collection;
-};
+const logger = require(`../logger`);
 class KeksobookingStore {
-  constructor(collection) {
-    this.collection = collection;
+  constructor(bdName) {
+    this.bdName = bdName;
   }
 
+  async getСollection() {
+    if (this._collection) {
+      return this._collection;
+    }
+    if (!this._collection) {
+      let dBase = await initDb()
+        .catch((e) => logger.error(`Failed to connect "${this.bdName}"`, e));
+      this._collection = await dBase.collection(this.bdName);
+      this._collection.createIndex({date: -1}, {unique: true});
+    }
+    return this._collection;
+  }
   async getObject(date) {
-    return (await this.collection).findOne({"date": parseInt(date, 10)});
+    const collection = await this.getСollection();
+    return collection.findOne({"date": parseInt(date, 10)});
   }
 
   async getAllObject() {
-    return (await this.collection).find();
+    const collection = await this.getСollection();
+    return collection.find();
   }
 
   async saveOffer(objectData, avatar, photos) {
@@ -50,5 +57,4 @@ class KeksobookingStore {
 
 }
 
-module.exports = new KeksobookingStore(setupCollection().
-catch((e) => logger.error(`Failed to set up "${DB_NAME.OFFER}"-collection`, e)));
+module.exports = new KeksobookingStore(DB_NAME.OFFER);

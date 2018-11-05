@@ -3,15 +3,26 @@ const {MongoClient} = require(`mongodb`);
 const logger = require(`../logger`);
 
 const {
-  DB_HOST = `localhost:27017`,
-  DB_PATH = `code-and-magick`
+  DB_HOST = `localhost`,
+  DB_PORT = 27017,
+  DB_NAME = `code-and-magick`
 } = process.env;
 
-const url = `mongodb://${DB_HOST}`;
+const url = `mongodb://${DB_HOST}:${DB_PORT}`;
 
-module.exports = MongoClient.connect(url, {useNewUrlParser: true})
-  .then((client) => client.db(DB_PATH))
-  .catch((e) => {
-    logger.error(`Failed to connect to MongoDB`, e);
+
+const initDb = async () => {
+  let client;
+  let db;
+  try {
+    client = await MongoClient.connect(url, {useNewUrlParser: true});
+    db = client.db(DB_NAME);
+  } catch (err) {
+    logger.error(`Failed to connect to MongoDB`, err);
     process.exit(1);
-  });
+  }
+
+  return db;
+};
+
+module.exports = initDb;

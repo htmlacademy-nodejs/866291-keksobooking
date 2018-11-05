@@ -1,9 +1,10 @@
 'use strict';
 
-const {rl} = require(`../data/readline`);
+const rl = require(`../data/readline`);
 const {generateEntity} = require(`../generator/generator-keksobooking`);
 const KeksobookingsStore = require(`../store/keksobooking-store`);
 const logger = require(`../logger`);
+const db = require(`../database/db`);
 const {COMMAND, REG_EXP} = require(`../data/constants`);
 
 const writeDb = async (quantity) => {
@@ -15,6 +16,7 @@ const writeDb = async (quantity) => {
   await KeksobookingsStore.saveAll(data)
     .then(() => {
       logger.info(`Созданно ${quantity} объектов в базе данных`);
+      db.stop();
     })
     .catch((e) => {
       logger.error(`Ошибка создания объектов: ${e}`);

@@ -2,7 +2,7 @@
 
 require(`colors`);
 const packageInfo = require(`../package`);
-const {rl} = require(`./data/readline`);
+const rl = require(`./data/readline`);
 const commands = [...require(`./commands/list`)];
 commands.push(require(`./commands/help`));
 commands.push(require(`./commands/default`));
@@ -30,7 +30,9 @@ module.exports = {
     if (!command) {
       rl.question(`Привет пользователь!\nЭта программа будет запускать сервер «${packageInfo.name.green}».\nАвтор: ${packageInfo.author.blue}.\nCгенерировать данные? (yes/no) : `, enterAccept);
     } else {
-      rl.pause();
+      if (command !== COMMAND.FILL) {
+        rl.close();
+      }
       commands.find((item) => isApplicable(item, command)).execute(...commandParams);
     }
   }

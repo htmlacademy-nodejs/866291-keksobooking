@@ -1,6 +1,6 @@
 'use strict';
 
-const initDb = require(`../database/db`);
+const db = require(`../database/db`);
 const {DEFAULT_KEKSOBOOKING, DB_NAME} = require(`../data/constants`);
 const logger = require(`../logger`);
 class KeksobookingStore {
@@ -13,13 +13,18 @@ class KeksobookingStore {
       return this._collection;
     }
     if (!this._collection) {
-      let dBase = await initDb()
+      let dBase = await db.get()
+        .then((dataBase) => {
+          logger.info(`Collection "${this.bdName}" connected`);
+          return dataBase;
+        })
         .catch((e) => logger.error(`Failed to connect "${this.bdName}"`, e));
       this._collection = await dBase.collection(this.bdName);
       this._collection.createIndex({date: -1}, {unique: true});
     }
     return this._collection;
   }
+
   async getObject(date) {
     const collection = await this.getСollection();
     return collection.findOne({"date": parseInt(date, 10)});
@@ -48,11 +53,13 @@ class KeksobookingStore {
       object.offer.photos[i] = `api/offers/${object.date}/photos/${i}`;
     }
 
-    return (await this.collection).insertOne(object);
+    const collection = await this.getСollection();
+    return collection.insertOne(object);
   }
 
   async saveAll(data) {
-    return (await this.collection).insertMany(data);
+    const collection = await this.getСollection();
+    return collection.insertMany(data);
   }
 
 }

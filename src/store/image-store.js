@@ -1,6 +1,6 @@
 'use strict';
 
-const initDb = require(`../database/db`);
+const db = require(`../database/db`);
 const {DB_NAME} = require(`../data/constants`);
 const mongodb = require(`mongodb`);
 const logger = require(`../logger`);
@@ -14,7 +14,11 @@ class ImageStore {
       return this._bucket;
     }
     if (!this._bucket) {
-      const dBase = await initDb()
+      const dBase = await db.get()
+        .then((dataBase) => {
+          logger.info(`Collection "${this.bdName}" connected`);
+          return dataBase;
+        })
         .catch((e) => logger.error(`Failed to connect "${this.bdName}"`, e));
       this._bucket = new mongodb.GridFSBucket(dBase, {
         chunkSizeBytes: 512 * 1024,

@@ -10,19 +10,42 @@ const {
 
 const url = `mongodb://${DB_HOST}:${DB_PORT}`;
 
-
-const initDb = async () => {
-  let client;
-  let db;
-  try {
-    client = await MongoClient.connect(url, {useNewUrlParser: true});
-    db = client.db(DB_NAME);
-  } catch (err) {
-    logger.error(`Failed to connect to MongoDB`, err);
-    process.exit(1);
+class DataBase {
+  constructor(urlText, dbName) {
+    this.url = urlText;
+    this.url = dbName;
   }
 
-  return db;
-};
+  async get() {
+    if (this._db) {
+      return this._db;
+    }
+    if (!this._db) {
+      await MongoClient.connect(url, {useNewUrlParser: true})
+        .then((client) => {
+          this._connect = client;
+          this._db = client.db(DB_NAME);
+          logger.info(`MongoDB connected`);
+        })
+        .catch((e) => {
+          logger.error(`Failed to connect to MongoDB`, e);
+          process.exit(1);
+        });
+    }
+    return this._db;
+  }
+  async stop() {
+    if (this._connect) {
+      this._connect.close()
+        .then(() => {
+          logger.info(`MongoDB close connect`);
+        })
+        .catch((e) => {
+          logger.error(`Failed to close connect to MongoDB`, e);
+          process.exit(1);
+        });
+    }
+  }
+}
 
-module.exports = initDb;
+module.exports = new DataBase(url, DB_NAME);

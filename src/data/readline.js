@@ -7,8 +7,5 @@ const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
-rl.close();
-module.exports = {
-  rl
-};
+module.exports = rl;
 
